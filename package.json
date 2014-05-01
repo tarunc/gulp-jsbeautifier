@@ -38,7 +38,8 @@
     "chai": "~1.9.1",
     "mocha": "~1.18.2",
     "gulp": "~3.6.2",
-    "blanket": "~1.1.6"
+    "blanket": "~1.1.6",
+    "mocha-lcov-reporter": "0.0.1"
   },
   "keywords": [
     "beautify",
@@ -58,7 +59,6 @@
     "css beautify",
     "json beautify"
   ],
-
   "config": {
     "blanket": {
       "pattern": "index.js"

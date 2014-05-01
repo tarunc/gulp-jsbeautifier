@@ -1,0 +1,60 @@
+{
+  "name": "gulp-jsbeautifier",
+  "description": "jsbeautifier.org for Gulp",
+  "version": "0.0.1",
+  "homepage": "https://github.com/tarunc/gulp-jsbeautifier",
+  "author": {
+    "name": "Tarun Chaudhry",
+    "url": "https://github.com/tarunc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tarunc/gulp-jsbeautifier.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tarunc/gulp-jsbeautifier/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/tarunc/gulp-jsbeautifier/blob/master/LICENSE.md"
+    }
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">= 0.9.0"
+  },
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "dependencies": {
+    "event-stream": "~3.0.20",
+    "js-beautify": "~1.4.2",
+    "gulp-util": "~2.2.14",
+    "lodash": "~2.4.1",
+    "underscore.string": "~2.3.3"
+  },
+  "devDependencies": {
+    "chai": "~1.8.1",
+    "mocha": "~1.16.1",
+    "gulp": "~3.6.2"
+  },
+  "keywords": [
+    "beautify",
+    "format",
+    "gulp",
+    "js-beautify",
+    "gulpplugin",
+    "html beautify",
+    "html format",
+    "html indent",
+    "html prettify",
+    "prettify",
+    "beautifier",
+    "jsbeautifier",
+    "code-quality",
+    "javascript beautify",
+    "css beautify",
+    "json beautify"
+  ]
+}

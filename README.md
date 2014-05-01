@@ -21,12 +21,12 @@ var prettify = require('gulp-jsbeautifier');
 
 gulp.task('git-pre-js', function() {
   gulp.src('./src/foo.js', './src/bar.json')
-    .pipe(prettify({indentSize: 2, config: '.jsbeautifyrc', mode: 'VERIFY_ONLY'}))
+    .pipe(prettify({config: '.jsbeautifyrc', mode: 'VERIFY_ONLY'}))
 });
 
 gulp.task('format-js', function() {
   gulp.src('./src/foo.js', './src/bar.json')
-    .pipe(prettify({indentSize: 2, config: '.jsbeautifyrc', mode: 'VERIFY_AND_WRITE'}))
+    .pipe(prettify({config: '.jsbeautifyrc', mode: 'VERIFY_AND_WRITE'}))
     .pipe(gulp.dest('./dist'))
 });
 

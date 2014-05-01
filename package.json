@@ -28,15 +28,15 @@
     "test": "mocha --require blanket --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js"
   },
   "dependencies": {
-    "event-stream": "~3.0.20",
-    "js-beautify": "~1.4.2",
+    "event-stream": "~3.1.5",
+    "js-beautify": "~1.5.1",
     "gulp-util": "~2.2.14",
     "lodash": "~2.4.1",
     "underscore.string": "~2.3.3"
   },
   "devDependencies": {
-    "chai": "~1.8.1",
-    "mocha": "~1.16.1",
+    "chai": "~1.9.1",
+    "mocha": "~1.18.2",
     "gulp": "~3.6.2",
     "blanket": "~1.1.6"
   },

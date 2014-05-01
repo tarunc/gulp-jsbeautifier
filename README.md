@@ -1,6 +1,8 @@
 # gulp-jsbeautifier
 [![Build Status](https://travis-ci.org/tarunc/gulp-jsbeautifier.png?branch=master)](https://travis-ci.org/tarunc/gulp-jsbeautifier)
 [![NPM version](https://badge.fury.io/js/gulp-jsbeautifier.png)](http://badge.fury.io/js/gulp-jsbeautifier)
+[![Dependencies](https://david-dm.org/tarunc/gulp-jsbeautifier.png)](https://david-dm.org/tarunc/gulp-jsbeautifier)
+[![devDependency Status](https://david-dm.org/tarunc/gulp-jsbeautifier/dev-status.svg)](https://david-dm.org/tarunc/gulp-jsbeautifier#info=devDependencies)
 
 > Prettify JavaScript, HTML, CSS, and JSON.
 

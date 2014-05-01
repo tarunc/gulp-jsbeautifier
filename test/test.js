@@ -53,4 +53,21 @@ describe('gulp-jsbeautifier', function () {
       prettyStream.write(fakeFile);
     });
   });
+
+  it('should handle null files correctly', function(done) {
+    var prettyStream = prettify();
+    var fakeFile = new gutil.File({
+      base: path.join(__dirname, FIXTURES_PATH),
+      cwd: __dirname,
+      path: path.join(__dirname, FIXTURES_PATH, 'foo.js'),
+      contents: null
+    });
+
+    prettyStream.once('data', function(newFile){
+      expect(newFile).to.equal(fakeFile);
+      done();
+    });
+
+    prettyStream.write(fakeFile);
+  });
 });

@@ -32,6 +32,24 @@ function convertCamelCaseToUnderScore(config) {
   });
 }
 
+function getFileType(file, config) {
+  var fileType = null,
+      fileMapping = {
+      'js': config.js.fileTypes,
+      'css': config.css.fileTypes,
+      'html': config.html.fileTypes
+      };
+
+  _.forEach(fileMapping, function(extensions, type) {
+    fileType = type;
+    return -1 === _.findIndex(extensions, function(ext) {
+      return stringUtils.endsWith(file.relative, ext);
+    });
+  });
+
+  return fileType;
+}
+
 function getBeautifierSetup(file, config) {
   var fileType = getFileType(file, config);
 
@@ -65,25 +83,7 @@ function beautify(file, config, actionHandler) {
   actionHandler(file, result);
 }
 
-function getFileType(file, config) {
-  var fileType = null,
-      fileMapping = {
-      'js': config.js.fileTypes,
-      'css': config.css.fileTypes,
-      'html': config.html.fileTypes
-      };
-
-  _.forEach(fileMapping, function(extensions, type) {
-    fileType = type;
-    return -1 === _.findIndex(extensions, function(ext) {
-      return stringUtils.endsWith(file.relative, ext);
-    });
-  });
-
-  return fileType;
-}
-
-function verifyActionHandler(cb, config) {
+function verifyActionHandler(cb) {
   return function verifyOnly(file, result) {
     /*jshint eqeqeq: false */
     if (file.contents.toString('utf8') == result) {
@@ -100,14 +100,14 @@ function verifyActionHandler(cb, config) {
   };
 }
 
-function verifyAndWriteActionHandler(cb, config) {
+function verifyAndWriteActionHandler(cb) {
   return function verifyAndWrite(file, result) {
     file.contents = new Buffer(result, 'utf8');
     return cb(null, file);
   };
 }
 
-module.exports = function(params) {
+module.exports = function prettify(params) {
   'use strict';
 
   params = params || {

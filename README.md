@@ -23,26 +23,81 @@ gulp.task('git-pre-js', function() {
 gulp.task('format-js', function() {
   gulp.src('./src/foo.js', './src/bar.json')
     .pipe(prettify({indentSize: 2, config: '.jsbeautifyrc', mode: 'VERIFY_AND_WRITE'}))
+    .pipe(gulp.dest('./dist'))
 });
 
 gulp.task('prettify-html', function() {
   gulp.src('./src/foo.html')
     .pipe(prettify({indentSize: 2}))
-    .pipe(gulp.folder('./dist/foo.html'))
+    .pipe(gulp.dest('./dist'))
 });
 
 gulp.task('prettify-css', function() {
   gulp.src('./src/foo.css')
     .pipe(prettify({indentSize: 2}))
-    .pipe(gulp.folder('./dist/foo.css'))
+    .pipe(gulp.dest('./dist'))
 });
 ```
 Other examples are in the [example folder.](http://github.com/tarunc/gulp-jsbeautifier/tree/master/examples)
 
 See the [js-beautify docs](https://github.com/einars/js-beautify) for options.
 
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality.
+## Config
+#### options.mode (optional)
+Type: `String`
+Default value: `VERIFY_AND_WRITE`
+
+If mode is "VERIFY_ONLY", then task will fail if at least one file can be beautified. This is useful for pre-commit check.
+If a filename is specified, options and globals defined therein will be used. The `jsbeautifyrc` file must be valid JSON and looks like the one supported by js-beautify itself.
+
+#### options.config (optional)
+Type: `String`
+Default value: `null`
+
+If a filename is specified, options and globals defined therein will be used. The `jsbeautifyrc` file must be valid JSON and looks like the one supported by js-beautify itself.
+
+### Default options from [js-beautify](https://github.com/einars/js-beautify#options) can be used
+```javascript
+.pipe(prettify({
+    config: "path/to/.jsbeautifyrc",
+    html: {
+        braceStyle: "collapse",
+        indentChar: " ",
+        indentScripts: "keep",
+        indentSize: 4,
+        maxPreserveNewlines: 10,
+        preserveNewlines: true,
+        unformatted: ["a", "sub", "sup", "b", "i", "u"],
+        wrapLineLength: 0
+    },
+    css: {
+        indentChar: " ",
+        indentSize: 4
+    },
+    js: {
+        braceStyle: "collapse",
+        breakChainedMethods: false,
+        e4x: false,
+        evalCode: false,
+        indentChar: " ",
+        indentLevel: 0,
+        indentSize: 4,
+        indentWithTabs: false,
+        jslintHappy: false,
+        keepArrayIndentation: false,
+        keepFunctionIndentation: false,
+        maxPreserveNewlines: 10,
+        preserveNewlines: true,
+        spaceBeforeConditional: true,
+        spaceInParen: false,
+        unescapeStrings: false,
+        wrapLineLength: 0
+    }
+));
+```
+Only specifiy options to overwrite.
+
+**NOTE:** All options can be specified similar to [js-beautify](https://github.com/einars/js-beautify#options) using underscore.
 
 ## License
 

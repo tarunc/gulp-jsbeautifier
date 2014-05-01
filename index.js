@@ -10,7 +10,6 @@ var es = require('event-stream');
 var prettify = require('js-beautify');
 var gutil = require('gulp-util');
 var _ = require('lodash');
-var path = require('path');
 var fs = require('fs');
 
 var stringUtils = require('underscore.string');

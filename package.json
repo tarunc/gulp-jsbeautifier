@@ -25,7 +25,7 @@
     "node": ">= 0.9.0"
   },
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "mocha --require blanket --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js"
   },
   "dependencies": {
     "event-stream": "~3.0.20",
@@ -37,7 +37,8 @@
   "devDependencies": {
     "chai": "~1.8.1",
     "mocha": "~1.16.1",
-    "gulp": "~3.6.2"
+    "gulp": "~3.6.2",
+    "blanket": "~1.1.6"
   },
   "keywords": [
     "beautify",
@@ -56,5 +57,11 @@
     "javascript beautify",
     "css beautify",
     "json beautify"
-  ]
+  ],
+
+  "config": {
+    "blanket": {
+      "pattern": "index.js"
+    }
+  }
 }

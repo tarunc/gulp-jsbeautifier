@@ -123,7 +123,7 @@ module.exports = function prettify(params) {
 
   var config;
   if (params.config) {
-    var baseConfig = JSON.parse(fs.readFileSync(path.resolve(params.config || '.jsbeautifyrc')));
+    var baseConfig = JSON.parse(fs.readFileSync(path.resolve(_.isString(params.config) ? params.config : '.jsbeautifyrc')));
 
     config = {
       js: {},

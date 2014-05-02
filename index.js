@@ -11,6 +11,7 @@ var prettify = require('js-beautify');
 var gutil = require('gulp-util');
 var _ = require('lodash');
 var fs = require('fs');
+var path = require('path');
 
 var stringUtils = require('underscore.string');
 
@@ -70,7 +71,7 @@ function beautify(file, config, actionHandler) {
       beautifyConfig = setup[1],
       addNewLine = setup[2];
 
-  gutil.log('Beautifying ', file.relative);
+  gutil.log('Beautifying', file.relative);
   var original = file.contents.toString('utf8');
 
   var result = beautifier(original, beautifyConfig);
@@ -79,13 +80,13 @@ function beautify(file, config, actionHandler) {
     result += '\n';
   }
 
-  actionHandler(file, result);
+  return actionHandler(file, result);
 }
 
 function verifyActionHandler(cb) {
   return function verifyOnly(file, result) {
     /*jshint eqeqeq: false */
-    if (file.contents.toString('utf8') == result) {
+    if (file.contents.toString('utf8') == result || file.contents.toString('utf8') == result.substr(0, result.length - 1)) {
       return cb(null, file);
     }
 
@@ -122,7 +123,7 @@ module.exports = function prettify(params) {
 
   var config;
   if (params.config) {
-    var baseConfig = JSON.parse(fs.readFileSync(params.config));
+    var baseConfig = JSON.parse(fs.readFileSync(path.resolve(params.config || '.jsbeautifyrc')));
 
     config = {
       js: {},

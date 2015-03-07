@@ -7,6 +7,7 @@
 
 
 var es = require('event-stream');
+var ansidiff = require('ansidiff');
 var prettify = require('js-beautify');
 var gutil = require('gulp-util');
 var _ = require('lodash');
@@ -47,7 +48,8 @@ function getFileType(file, config) {
     });
   });
 
-  return fileType;
+  // Default fileType is js
+  return fileType || 'js';
 }
 
 function getBeautifierSetup(file, config) {
@@ -85,14 +87,16 @@ function beautify(file, config, actionHandler) {
 
 function verifyActionHandler(cb) {
   return function verifyOnly(file, result) {
+    var fileContents = file.contents.toString('utf8');
+
     /*jshint eqeqeq: false */
-    if (file.contents.toString('utf8') == result || file.contents.toString('utf8') == result.substr(0, result.length - 1)) {
+    if (fileContents == result || fileContents == result.substr(0, result.length - 1)) {
       return cb(null, file);
     }
 
     // return cb(null, file);
     var errOpts = {
-      message: 'Beautify failed for: ' + file.relative,
+      message: 'Beautify failed for: ' + file.relative + '\n\n' + ansidiff.chars(fileContents, result),
       showStack: false
     };
 

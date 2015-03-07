@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 
-Copyright (c) 2014 Tarun Chaudhry &lt;tarunc92@gmail.com&gt;
+Copyright (c) 2015 Tarun Chaudhry &lt;tarunc92@gmail.com&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

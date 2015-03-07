@@ -1,7 +1,7 @@
 {
   "name": "gulp-jsbeautifier",
   "description": "jsbeautifier.org for Gulp",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "https://github.com/tarunc/gulp-jsbeautifier",
   "author": {
     "name": "Tarun Chaudhry",
@@ -28,9 +28,10 @@
     "test": "mocha --require blanket --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js"
   },
   "dependencies": {
+    "ansidiff": "^1.0.0",
     "event-stream": "~3.1.5",
-    "js-beautify": "~1.5.1",
     "gulp-util": "~2.2.14",
+    "js-beautify": "~1.5.1",
     "lodash": "~2.4.1",
     "underscore.string": "~2.3.3"
   },

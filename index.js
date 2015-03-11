@@ -123,7 +123,7 @@ module.exports = function prettify(params) {
     js: {},
     css: {},
     html: {},
-		logSuccess: true
+    logSuccess: true
   });
 
   var config;

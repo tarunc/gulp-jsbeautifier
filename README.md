@@ -54,6 +54,12 @@ Default value: `VERIFY_AND_WRITE`
 If mode is "VERIFY_ONLY", then task will fail if at least one file can be beautified. This is useful for pre-commit check.
 If a filename is specified, options and globals defined therein will be used. The `jsbeautifyrc` file must be valid JSON and looks like the one supported by js-beautify itself.
 
+#### options.logSuccess (optional)
+Type: `Boolean`
+Default value: `true`
+
+Configures whether to log on success or not. When this is set to `true`, this will print `Beautifying filename.js` for each file. When set to false, it will not print this when it is successful in beautiying the file. This is helpful for debugging purposes. If you are having difficulties, try setting this to `true`.
+
 #### options.config (optional)
 Type: `String`
 Default value: `null`

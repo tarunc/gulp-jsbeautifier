@@ -73,7 +73,7 @@ function beautify(file, config, actionHandler) {
       beautifyConfig = setup[1],
       addNewLine = setup[2];
 
-  gutil.log('Beautifying', file.relative);
+  if(config.logSuccess) gutil.log('Beautifying', file.relative);
   var original = file.contents.toString('utf8');
 
   var result = beautifier(original, beautifyConfig);
@@ -122,7 +122,8 @@ module.exports = function prettify(params) {
     mode: 'VERIFY_AND_WRITE',
     js: {},
     css: {},
-    html: {}
+    html: {},
+    logSuccess: true
   });
 
   var config;

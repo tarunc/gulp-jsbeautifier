@@ -21,9 +21,15 @@ var FIXTURES_PATH = './fixtures/';
 
 var EXPECTED_PATH = './expected/';
 
+var WRITE_PATH = false; // './produced/';
+
 var files = fs.readdirSync(path.join(__dirname, FIXTURES_PATH));
 
 describe('gulp-jsbeautifier', function () {
+  if (WRITE_PATH && !fs.existsSync(path.join(__dirname, WRITE_PATH))) {
+    fs.mkdirSync(path.join(__dirname, WRITE_PATH));
+  }
+  
   _.forEach(files, function(file) {
     it('should prettify ' + file, function (done) {
       var opts = {};
@@ -33,7 +39,9 @@ describe('gulp-jsbeautifier', function () {
         };
       } else {
         opts = {
-          indentSize: 2
+          indentSize: 1,
+          indentChar: '\t',
+          newline_between_rules: true
         };
       }
 
@@ -46,6 +54,11 @@ describe('gulp-jsbeautifier', function () {
       });
 
       prettyStream.once('data', function(newFile){
+        
+        if (WRITE_PATH) {
+          fs.writeFileSync(path.join(__dirname, WRITE_PATH, file), String(newFile.contents));
+        }
+        
         expect(String(newFile.contents)).to.equal(String(fs.readFileSync(path.join(__dirname, EXPECTED_PATH, file))));
         done();
       });

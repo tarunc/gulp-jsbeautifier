@@ -129,28 +129,26 @@ module.exports = function prettify(params) {
     logSuccess: true
   });
 
-  var config;
+  var config = {
+    js: {},
+    css: {},
+    html: {}
+  };
+  
+  var baseConfig = params;
   if (params.config) {
-    var baseConfig = JSON.parse(fs.readFileSync(path.resolve(_.isString(params.config) ? params.config : '.jsbeautifyrc')));
-
-    config = {
-      js: {},
-      css: {},
-      html: {}
-    };
-
-    _.extend(config.js, baseConfig);
-    _.extend(config.css, baseConfig);
-    _.extend(config.html, baseConfig);
-    _.extend(config.js, baseConfig.js);
-    _.extend(config.css, baseConfig.css);
-    _.extend(config.html, baseConfig.html);
-    _.extend(config.js, params.js);
-    _.extend(config.css, params.css);
-    _.extend(config.html, params.html);
-  } else {
-    config = params;
+    baseConfig = JSON.parse(fs.readFileSync(path.resolve(_.isString(params.config) ? params.config : '.jsbeautifyrc')));
   }
+
+  _.extend(config.js, baseConfig);
+  _.extend(config.css, baseConfig);
+  _.extend(config.html, baseConfig);
+  _.extend(config.js, baseConfig.js);
+  _.extend(config.css, baseConfig.css);
+  _.extend(config.html, baseConfig.html);
+  _.extend(config.js, params.js);
+  _.extend(config.css, params.css);
+  _.extend(config.html, params.html);
 
   config.js.fileTypes = _.union(config.js.fileTypes, ['.js', '.json']);
   config.css.fileTypes = _.union(config.css.fileTypes, ['.css']);

@@ -15,12 +15,18 @@ gulp.task('format-js', function() {
 
 gulp.task('prettify-html', function() {
   gulp.src('./src/foo.html')
-    .pipe(prettify({indentSize: 2}))
+    .pipe(prettify({indent_size: 2}))
     .pipe(gulp.dest('./build'));
 });
 
 gulp.task('prettify-css', function() {
   gulp.src('./src/foo.css')
-    .pipe(prettify({indentSize: 2}))
+    .pipe(prettify({indent_size: 2}))
+    .pipe(gulp.dest('./build'));
+});
+
+gulp.task('prettify-css-with-just-css-options', function() {
+  gulp.src('./src/foo.css')
+    .pipe(prettify({css: {indent_size: 2, indent_char: '\t'}}))
     .pipe(gulp.dest('./build'));
 });

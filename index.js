@@ -1,7 +1,7 @@
 /*
  * gulp-jsbeautifier
  * https://github.com/tarunc/gulp-jsbeautifier
- * Copyright (c) 2014 Tarun Chaudhry
+ * Copyright (c) 2015 Tarun Chaudhry
  * Licensed under the MIT license.
  */
 

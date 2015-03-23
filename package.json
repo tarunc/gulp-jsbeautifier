@@ -25,7 +25,8 @@
     "node": ">= 0.10.0"
   },
   "scripts": {
-    "test": "mocha --require blanket --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js"
+    "test": "mocha",
+    "coverage": "jscoverage index.js index-cov.js; COVERAGE=1 mocha --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js"
   },
   "dependencies": {
     "ansidiff": "^1.0.0",
@@ -36,12 +37,13 @@
     "underscore.string": "^3.0.3"
   },
   "devDependencies": {
-    "chai": "^2.1.2",
-    "mocha": "^2.2.1",
-    "gulp": "^3.8.11",
     "blanket": "^1.1.6",
-    "mocha-lcov-reporter": "0.0.1",
-    "coveralls": "^2.11.2"
+    "chai": "^2.1.2",
+    "coveralls": "^2.11.2",
+    "gulp": "^3.8.11",
+    "jscoverage": "^0.5.9",
+    "mocha": "^2.2.1",
+    "mocha-lcov-reporter": "0.0.1"
   },
   "keywords": [
     "beautify",

@@ -17,3 +17,5 @@ node_modules
 *.sublime*
 
 coverage*
+coverage.html
+index-cov.js

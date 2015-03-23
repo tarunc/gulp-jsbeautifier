@@ -6,3 +6,5 @@ node_js:
 env:
   global:
     - COVERALLS_REPO_TOKEN=sqDxXMd01aMtd3rb6tzOL8BsrsUOV4I66
+after_script:
+  - "npm coverage"

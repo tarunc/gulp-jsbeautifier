@@ -14,7 +14,7 @@ var fs = require('fs');
 var path = require('path');
 var gutil = require('gulp-util');
 var expect = require('chai').expect;
-var prettify = require('../');
+var prettify = process.env.COVERAGE ? require('../index-cov.js') : require('../');
 var _ = require('lodash');
 
 var FIXTURES_PATH = './fixtures/';

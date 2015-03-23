@@ -1,7 +1,7 @@
 {
   "name": "gulp-jsbeautifier",
   "description": "jsbeautifier.org for Gulp",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "homepage": "https://github.com/tarunc/gulp-jsbeautifier",
   "author": {
     "name": "Tarun Chaudhry",
@@ -40,7 +40,7 @@
     "mocha": "^2.2.1",
     "gulp": "^3.8.11",
     "blanket": "^1.1.6",
-    "mocha-lcov-reporter": "^0.0.2",
+    "mocha-lcov-reporter": "0.0.1",
     "coveralls": "^2.11.2"
   },
   "keywords": [

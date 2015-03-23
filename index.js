@@ -117,9 +117,7 @@ function verifyAndWriteActionHandler(cb) {
 module.exports = function prettify(params) {
   'use strict';
 
-  params = params || {};
-
-  _.defaults(params, {
+  params = _.defaults(params || {}, {
     mode: 'VERIFY_AND_WRITE',
     js: {},
     css: {},
@@ -128,22 +126,24 @@ module.exports = function prettify(params) {
     showStack: false
   });
 
+  // Try to get rcLoader working
+  // var rcLoader = new RcFinder('.jsbeautifyrc', params.config);
+
   var config = {
     js: {},
     css: {},
     html: {}
   };
-  
+
   var baseConfig = {};
-  var baseConfigRoot = {};
+  var baseConfigRoot = _.omit(params, 'js', 'css', 'html');
   if (params.config) {
     baseConfig = JSON.parse(fs.readFileSync(path.resolve(_.isString(params.config) ? params.config : '.jsbeautifyrc')));
-    baseConfigRoot = _.omit(baseConfig, 'js', 'css', 'html');
   }
 
-  _.extend(config.js, baseConfigRoot, baseConfig.js || {}, params.js);
-  _.extend(config.css, baseConfigRoot, baseConfig.css || {}, params.css);
-  _.extend(config.html, baseConfigRoot, baseConfig.html || {}, params.html);
+  _.extend(config.js, baseConfigRoot, baseConfig, baseConfig.js || {}, params.js);
+  _.extend(config.css, baseConfigRoot, baseConfig, baseConfig.css || {}, params.css);
+  _.extend(config.html, baseConfigRoot, baseConfig, baseConfig.html || {}, params.html);
   _.extend(config, _.omit(params, 'js', 'css', 'html'));
 
   config.js.fileTypes = _.union(config.js.fileTypes, ['.js', '.json']);

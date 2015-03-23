@@ -117,16 +117,15 @@ function verifyAndWriteActionHandler(cb) {
 module.exports = function prettify(params) {
   'use strict';
 
-  params = params || {
-    showStack: false
-  };
+  params = params || {};
 
   _.defaults(params, {
     mode: 'VERIFY_AND_WRITE',
     js: {},
     css: {},
     html: {},
-    logSuccess: true
+    logSuccess: true,
+    showStack: false
   });
 
   var config = {
@@ -135,20 +134,17 @@ module.exports = function prettify(params) {
     html: {}
   };
   
-  var baseConfig = params;
+  var baseConfig = {};
+  var baseConfigRoot = {};
   if (params.config) {
     baseConfig = JSON.parse(fs.readFileSync(path.resolve(_.isString(params.config) ? params.config : '.jsbeautifyrc')));
+    baseConfigRoot = _.omit(baseConfig, 'js', 'css', 'html');
   }
 
-  _.extend(config.js, baseConfig);
-  _.extend(config.css, baseConfig);
-  _.extend(config.html, baseConfig);
-  _.extend(config.js, baseConfig.js);
-  _.extend(config.css, baseConfig.css);
-  _.extend(config.html, baseConfig.html);
-  _.extend(config.js, params.js);
-  _.extend(config.css, params.css);
-  _.extend(config.html, params.html);
+  _.extend(config.js, baseConfigRoot, baseConfig.js || {}, params.js);
+  _.extend(config.css, baseConfigRoot, baseConfig.css || {}, params.css);
+  _.extend(config.html, baseConfigRoot, baseConfig.html || {}, params.html);
+  _.extend(config, _.omit(params, 'js', 'css', 'html'));
 
   config.js.fileTypes = _.union(config.js.fileTypes, ['.js', '.json']);
   config.css.fileTypes = _.union(config.css.fileTypes, ['.css']);
@@ -156,7 +152,7 @@ module.exports = function prettify(params) {
 
   convertCamelCaseToUnderScore(config);
 
-  var actionHandler = 'VERIFY_ONLY' === params.mode ? verifyActionHandler : verifyAndWriteActionHandler;
+  var actionHandler = 'VERIFY_ONLY' === config.mode ? verifyActionHandler : verifyAndWriteActionHandler;
 
   return es.map(function(file, cb) {
     if (file.isNull()) {

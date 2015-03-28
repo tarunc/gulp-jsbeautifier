@@ -34,12 +34,12 @@ function convertCamelCaseToUnderScore(config) {
 }
 
 function getFileType(file, config) {
-  var fileType = null,
-      fileMapping = {
-      'js': config.js.fileTypes,
-      'css': config.css.fileTypes,
-      'html': config.html.fileTypes
-      };
+  var fileType = null;
+  var fileMapping = {
+    js: config.js.fileTypes,
+    css: config.css.fileTypes,
+    html: config.html.fileTypes
+  };
 
   _.forEach(fileMapping, function(extensions, type) {
     fileType = type;

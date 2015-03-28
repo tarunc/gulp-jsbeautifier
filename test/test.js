@@ -25,6 +25,9 @@ var WRITE_PATH = false; // './produced/';
 
 var files = fs.readdirSync(path.join(__dirname, FIXTURES_PATH));
 
+var gulp = require('gulp');
+var fixtures = function (glob) { return path.join(__dirname, 'fixtures', glob); }
+
 describe('gulp-jsbeautifier', function () {
   if (WRITE_PATH && !fs.existsSync(path.join(__dirname, WRITE_PATH))) {
     fs.mkdirSync(path.join(__dirname, WRITE_PATH));
@@ -68,8 +71,7 @@ describe('gulp-jsbeautifier', function () {
         contents: fs.readFileSync(path.join(__dirname, FIXTURES_PATH, file))
       });
 
-      prettyStream.once('data', function(newFile){
-
+      prettyStream.once('data', function(newFile) {
         if (WRITE_PATH) {
           fs.writeFileSync(path.join(__dirname, WRITE_PATH, file), String(newFile.contents));
         }
@@ -80,6 +82,15 @@ describe('gulp-jsbeautifier', function () {
 
       prettyStream.write(fakeFile);
     });
+  });
+
+  it('should emit error on streamed file', function (done) {
+    gulp.src(fixtures('*'), { buffer: false })
+      .pipe(prettify())
+      .on('error', function (err) {
+        expect(err.message).to.equal('Streaming not supported');
+        done();
+      });
   });
 
   it('should log correct files', function() {

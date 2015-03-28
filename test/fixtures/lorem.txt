@@ -1,0 +1,3 @@
+var AccountsIndexController = Ember.ObjectController.extend({
+needs:['marketplace']
+});

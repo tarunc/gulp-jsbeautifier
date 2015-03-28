@@ -17,25 +17,24 @@
 		"use strict";
 
 		var result = {};
-		var extend = function(i, element) {
+		var extend = function(i,element) {
 			var node = result[element.name],
 				val = $.trim(element.value);
 
 			// If node with same name exists already, need to convert it to an array as it
 			// is a multi-value field (i.e., checkboxes)
 
-			if ('undefined' !== typeof node && node !== null) {
-				if ($.isArray(node)) {
+			if ('undefined' !== typeof node && node !== null) {if ($.isArray(node)) {
 					node.push(val);
 				} else {
-					result[element.name] = [node, val];
+result[element.name] = [node, val];
 				}
 			} else {
-				result[element.name] = val;
+result[element.name] = val;
 			}
 		};
 
-		$.each(this.serializeArray(), extend);
+		$.each(this.serializeArray(),extend);
 		return result;
 	};
 })(jQuery);

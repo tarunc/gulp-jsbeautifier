@@ -84,6 +84,86 @@ describe('gulp-jsbeautifier', function () {
     });
   });
 
+  _.forEach(files, function(file) {
+    it('should be prettified ' + file, function (done) {
+      var opts = {};
+      if (file.indexOf('.js') > 0 || file.indexOf('.json') > 0) {
+        opts = {
+          config: path.join(__dirname, '.jsbeautifyrc'),
+          mode: 'VERIFY_ONLY',
+          logSuccess: false
+        };
+        jsFiles.push(file);
+      } else {
+        opts = {
+          indentSize: 1,
+          indentChar: '\t',
+          newline_between_rules: true,
+          logSuccess: false,
+          html: {
+            max_preserve_newlines: 1
+          },
+          mode: 'VERIFY_ONLY'
+        };
+        otherFiles.push(file);
+      }
+
+      var prettyStream = prettify(opts);
+      var fakeFile = new gutil.File({
+        base: path.join(__dirname, FIXTURES_PATH),
+        cwd: __dirname,
+        path: path.join(__dirname, FIXTURES_PATH, file),
+        contents: fs.readFileSync(path.join(__dirname, EXPECTED_PATH, file))
+      });
+
+      prettyStream.once('data', function(newFile) {
+        done();
+      });
+
+      prettyStream.write(fakeFile);
+    });
+  });
+
+  _.forEach(files, function(file) {
+    it('should error on unprettified ' + file, function (done) {
+      var opts = {};
+      if (file.indexOf('.js') > 0 || file.indexOf('.json') > 0) {
+        opts = {
+          config: path.join(__dirname, '.jsbeautifyrc'),
+          mode: 'VERIFY_ONLY',
+          logSuccess: false
+        };
+        jsFiles.push(file);
+      } else {
+        opts = {
+          indentSize: 1,
+          indentChar: '\t',
+          newline_between_rules: true,
+          logSuccess: false,
+          html: {
+            max_preserve_newlines: 1
+          },
+          mode: 'VERIFY_ONLY'
+        };
+        otherFiles.push(file);
+      }
+
+      var prettyStream = prettify(opts);
+      var fakeFile = new gutil.File({
+        base: path.join(__dirname, FIXTURES_PATH),
+        cwd: __dirname,
+        path: path.join(__dirname, FIXTURES_PATH, file),
+        contents: fs.readFileSync(path.join(__dirname, FIXTURES_PATH, file))
+      });
+
+      prettyStream.once('error', function(newFile) {
+        return done();
+      });
+
+      prettyStream.write(fakeFile);
+    });
+  });
+
   it('should emit error on streamed file', function (done) {
     gulp.src(fixtures('*'), { buffer: false })
       .pipe(prettify())

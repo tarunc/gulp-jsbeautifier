@@ -52,7 +52,10 @@ describe('gulp-jsbeautifier', function () {
           indentSize: 1,
           indentChar: '\t',
           newline_between_rules: true,
-          logSuccess: false
+          logSuccess: false,
+          html: {
+            max_preserve_newlines: 1
+          }
         };
         otherFiles.push(file);
       }

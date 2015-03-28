@@ -18,12 +18,14 @@
 .modal-open.page-overflow .modal-scrollable {
 	overflow-y: scroll;
 }
+
 @media (max-width: 979px) {
 	.modal-open.page-overflow .page-container .navbar-fixed-top,
 	.modal-open.page-overflow .page-container .navbar-fixed-bottom {
 		overflow-y: visible;
 	}
 }
+
 .modal-scrollable {
 	position: fixed;
 	top: 0;
@@ -32,6 +34,7 @@
 	right: 0;
 	overflow: auto;
 }
+
 .modal {
 	outline: none;
 	position: absolute;
@@ -40,6 +43,7 @@
 	overflow: visible;
 	/* allow content to popup out (i.e tooltips) */
 }
+
 .modal.fade {
 	top: -100%;
 	-webkit-transition: opacity 0.3s linear, top 0.3s ease-out, bottom 0.3s ease-out, margin-top 0.3s ease-out;
@@ -47,17 +51,21 @@
 	-o-transition: opacity 0.3s linear, top 0.3s ease-out, bottom 0.3s ease-out, margin-top 0.3s ease-out;
 	transition: opacity 0.3s linear, top 0.3s ease-out, bottom 0.3s ease-out, margin-top 0.3s ease-out;
 }
+
 .modal.fade.in {
 	top: 50%;
 }
+
 .modal-body {
 	max-height: none;
 	overflow: visible;
 }
+
 .modal.modal-absolute {
 	position: absolute;
 	z-index: 950;
 }
+
 .modal .loading-mask {
 	position: absolute;
 	top: 0;
@@ -67,16 +75,19 @@
 	background: #fff;
 	border-radius: 6px;
 }
+
 .modal-backdrop.modal-absolute {
 	position: absolute;
 	z-index: 940;
 }
+
 .modal-backdrop,
 .modal-backdrop.fade.in {
 	opacity: 0.7;
 	filter: alpha(opacity=70);
 	background: #fff;
 }
+
 .modal.container {
 	width: 940px;
 	margin-left: -470px;
@@ -86,12 +97,15 @@
 .modal-overflow.modal {
 	top: 1%;
 }
+
 .modal-overflow.modal.fade {
 	top: -100%;
 }
+
 .modal-overflow.modal.fade.in {
 	top: 1%;
 }
+
 .modal-overflow .modal-body {
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
@@ -104,6 +118,7 @@
 		margin-left: -585px;
 	}
 }
+
 @media (max-width: 979px) {
 	.modal,
 	.modal.container,
@@ -136,6 +151,7 @@
 		position: static;
 	}
 }
+
 .loading-spinner {
 	position: absolute;
 	top: 50%;
@@ -158,6 +174,7 @@ Copyright (c) 2012 Dan Eden*/
 	-o-animation-fill-mode: both;
 	animation-fill-mode: both;
 }
+
 @-webkit-keyframes shake {
 	0%, 100% {
 		-webkit-transform: translateX(0);
@@ -176,6 +193,7 @@ Copyright (c) 2012 Dan Eden*/
 		-webkit-transform: translateX(10px);
 	}
 }
+
 @-moz-keyframes shake {
 	0%, 100% {
 		-moz-transform: translateX(0);
@@ -194,6 +212,7 @@ Copyright (c) 2012 Dan Eden*/
 		-moz-transform: translateX(10px);
 	}
 }
+
 @-o-keyframes shake {
 	0%, 100% {
 		-o-transform: translateX(0);
@@ -212,6 +231,7 @@ Copyright (c) 2012 Dan Eden*/
 		-o-transform: translateX(10px);
 	}
 }
+
 @keyframes shake {
 	0%, 100% {
 		transform: translateX(0);
@@ -230,6 +250,7 @@ Copyright (c) 2012 Dan Eden*/
 		transform: translateX(10px);
 	}
 }
+
 .shake {
 	-webkit-animation-name: shake;
 	-moz-animation-name: shake;

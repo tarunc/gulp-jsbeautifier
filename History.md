@@ -1,4 +1,10 @@
 
+1.0.1 / 2015-07-11
+==================
+
+  * Added `showDiff` option
+  * Upgrade `jsbeautifier` package
+
 1.0.0 / 2015-06-19
 ==================
 

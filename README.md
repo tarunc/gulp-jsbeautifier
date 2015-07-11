@@ -60,6 +60,12 @@ Default value: `true`
 
 Configures whether to log on success or not. When this is set to `true`, this will print `Beautifying filename.js` for each file. When set to false, it will not print this when it is successful in beautiying the file. This is helpful for debugging purposes. If you are having difficulties, try setting this to `true`.
 
+#### options.showDiff (optional)
+Type: `Boolean`
+Default value: `true`
+
+Configures whether to print a diff of the file when `mode == "VERIFY_ONLY"`.
+
 #### options.config (optional)
 Type: `String`
 Default value: `null`

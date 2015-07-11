@@ -6,5 +6,9 @@ node_js:
 env:
   global:
     - COVERALLS_REPO_TOKEN=sqDxXMd01aMtd3rb6tzOL8BsrsUOV4I66
+cache:
+  directories:
+    - node_modules
 after_script:
   - "npm run coverage"
+sudo: false

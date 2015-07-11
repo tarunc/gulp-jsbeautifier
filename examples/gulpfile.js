@@ -7,6 +7,11 @@ gulp.task('verify-js', function() {
     .pipe(prettify({config: '.jsbeautifyrc', mode: 'VERIFY_ONLY'}));
 });
 
+gulp.task('verify-js-diff', function() {
+  gulp.src(['./src/foo.js', './src/bar.json'])
+    .pipe(prettify({config: '.jsbeautifyrc', mode: 'VERIFY_ONLY', showDiff: false}));
+});
+
 gulp.task('format-js', function() {
   gulp.src(['./src/foo.js', './src/bar.json'])
     .pipe(prettify({config: '.jsbeautifyrc', mode: 'VERIFY_AND_WRITE'}))

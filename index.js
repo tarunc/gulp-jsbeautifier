@@ -88,7 +88,7 @@ function beautify(file, config, actionHandler) {
   return actionHandler(file, result);
 }
 
-function verifyActionHandler(cb) {
+function verifyActionHandler(cb, params) {
   return function verifyOnly(file, result) {
     var fileContents = file.contents.toString('utf8');
 
@@ -99,9 +99,13 @@ function verifyActionHandler(cb) {
 
     // return cb(null, file);
     var errOpts = {
-      message: 'Beautify failed for: ' + file.relative + '\n\n' + ansidiff.chars(fileContents, result),
+      message: 'Beautify failed for: ' + file.relative,
       showStack: false
     };
+
+    if (params.showDiff) {
+      errOpts.message += '\n\n' + ansidiff.chars(fileContents, result);
+    }
 
     return cb(new gutil.PluginError('gulp-jsbeautifier', errOpts, { showStack: false }), file);
   };
@@ -123,7 +127,8 @@ module.exports = function prettify(params) {
     css: {},
     html: {},
     logSuccess: true,
-    showStack: false
+    showStack: false,
+    showDiff: true
   });
 
   // Try to get rcLoader working

@@ -32,7 +32,7 @@
     "ansidiff": "^1.0.0",
     "event-stream": "^3.3.0",
     "gulp-util": "^3.0.4",
-    "js-beautify": "^1.5.1",
+    "js-beautify": "^1.5.10",
     "lodash": "^3.5.0",
     "underscore.string": "^3.0.3"
   },

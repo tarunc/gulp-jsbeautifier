@@ -152,7 +152,7 @@ module.exports = function prettify(params) {
   _.extend(config, _.omit(params, 'js', 'css', 'html'));
 
   config.js.fileTypes = _.union(config.js.fileTypes, ['.js', '.json']);
-  config.css.fileTypes = _.union(config.css.fileTypes, ['.css']);
+  config.css.fileTypes = _.union(config.css.fileTypes, ['.css', '.scss', '.sass', '.less']);
   config.html.fileTypes = _.union(config.html.fileTypes, ['.html']);
 
   convertCamelCaseToUnderScore(config);

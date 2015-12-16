@@ -139,7 +139,7 @@ module.exports = function prettify(params) {
 
   var baseConfig = {};
   var baseConfigRoot = _.omit(params, 'js', 'css', 'html');
-  var rcFile = require("rc")("jsbeautify", {});
+  var rcFile = require('rc')('jsbeautify', {});
 
   if (params.config || !_.isEqual(rcFile, {})) {
     var baseConfig = params.config ? JSON.parse(fs.readFileSync(path.resolve(params.config))) : rcFile;

@@ -131,9 +131,6 @@ module.exports = function prettify(params) {
     showDiff: true
   });
 
-  // Try to get rcLoader working
-  // var rcLoader = new RcFinder('.jsbeautifyrc', params.config);
-
   var config = {
     js: {},
     css: {},
@@ -142,8 +139,10 @@ module.exports = function prettify(params) {
 
   var baseConfig = {};
   var baseConfigRoot = _.omit(params, 'js', 'css', 'html');
-  if (params.config) {
-    baseConfig = JSON.parse(fs.readFileSync(path.resolve(_.isString(params.config) ? params.config : '.jsbeautifyrc')));
+  var rcFile = require('rc')('jsbeautify', {});
+
+  if (params.config || !_.isEqual(rcFile, {})) {
+    var baseConfig = params.config ? JSON.parse(fs.readFileSync(path.resolve(params.config))) : rcFile;
   }
 
   _.extend(config.js, baseConfigRoot, baseConfig, baseConfig.js || {}, params.js);

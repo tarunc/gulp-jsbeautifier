@@ -175,11 +175,11 @@ describe('gulp-jsbeautifier', function () {
 
   it('should log correct files', function() {
     _.forEach(jsFiles, function(file) {
-      expect(output).to.contain('Beautifying ' + file);
+      expect(output).to.contain('Beautifying ' + gutil.colors.cyan(file));
     });
 
     _.forEach(otherFiles, function(file) {
-      expect(output).to.not.contain('Beautifying ' + file);
+      expect(output).to.not.contain('Beautifying ' + gutil.colors.cyan(file));
     });
   });
 

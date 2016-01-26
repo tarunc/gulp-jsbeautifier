@@ -65,7 +65,7 @@ function getBeautifierSetup(file, config) {
 function beautify(file, config, actionHandler) {
   var setup = getBeautifierSetup(file, config);
   if (!setup) {
-    gutil.log('Cannot beautify ' + file.relative + ' (only js, css and html files can be beautified)');
+    gutil.log('Cannot beautify', gutil.colors.cyan(file.relative), '(only js, css and html files can be beautified)');
     return;
   }
 
@@ -74,7 +74,7 @@ function beautify(file, config, actionHandler) {
       addNewLine = setup[2];
 
   if (config.logSuccess) {
-    gutil.log('Beautifying', file.relative);
+    gutil.log('Beautifying', gutil.colors.cyan(file.relative));
   }
 
   var original = file.contents.toString('utf8');

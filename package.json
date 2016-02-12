@@ -1,7 +1,7 @@
 {
   "name": "gulp-jsbeautifier",
   "description": "jsbeautifier.org for Gulp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "https://github.com/tarunc/gulp-jsbeautifier",
   "author": {
     "name": "Tarun Chaudhry",
@@ -14,12 +14,7 @@
   "bugs": {
     "url": "https://github.com/tarunc/gulp-jsbeautifier/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/tarunc/gulp-jsbeautifier/blob/master/LICENSE.md"
-    }
-  ],
+  "license": "MIT",
   "main": "index.js",
   "engines": {
     "node": ">= 0.10.0"
@@ -30,21 +25,21 @@
   },
   "dependencies": {
     "ansidiff": "^1.0.0",
-    "event-stream": "^3.3.0",
-    "gulp-util": "^3.0.4",
-    "js-beautify": "^1.5.10",
-    "lodash": "^3.5.0",
-    "rc": "^1.1.5",
-    "underscore.string": "^3.0.3"
+    "event-stream": "^3.3.2",
+    "gulp-util": "^3.0.7",
+    "js-beautify": "^1.6.2",
+    "lodash": "^4.3.0",
+    "rc": "^1.1.6",
+    "underscore.string": "^3.2.3"
   },
   "devDependencies": {
-    "blanket": "^1.1.6",
-    "chai": "^2.1.2",
-    "coveralls": "^2.11.2",
-    "gulp": "^3.8.11",
-    "jscoverage": "^0.5.9",
-    "mocha": "^2.2.1",
-    "mocha-lcov-reporter": "0.0.1"
+    "blanket": "^1.2.1",
+    "chai": "^3.5.0",
+    "coveralls": "^2.11.6",
+    "gulp": "^3.9.1",
+    "jscoverage": "^0.6.0",
+    "mocha": "^2.4.5",
+    "mocha-lcov-reporter": "1.0.0"
   },
   "keywords": [
     "beautify",

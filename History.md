@@ -1,4 +1,10 @@
 
+1.0.2 / 2016-02-11
+==================
+
+  * Added different color to the logs
+  * Upgraded dependencies
+
 1.0.1 / 2015-07-11
 ==================
 

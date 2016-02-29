@@ -1,3 +1,14 @@
+2.0.0 / 2016-03-01
+==================
+
+  * Rewrite all the code
+  * Improved documentation
+  * Improved tests
+  * Added a reporter (replaces the `showDiff` option)
+  * Added `debug` option
+  * Removed `mode` and `showDiff` options (use `gulp-diff` plugin instead)
+  * Changed logic of merging options
+  * Use 'snake_case' instead of 'camelCase' for options (for consistency with `js-beautify`)
 
 1.0.2 / 2016-02-11
 ==================

@@ -6,114 +6,186 @@
 [![Dependencies](https://david-dm.org/tarunc/gulp-jsbeautifier.png)](https://david-dm.org/tarunc/gulp-jsbeautifier)
 [![devDependency Status](https://david-dm.org/tarunc/gulp-jsbeautifier/dev-status.png)](https://david-dm.org/tarunc/gulp-jsbeautifier#info=devDependencies)
 
-> Prettify JavaScript, HTML, CSS, and JSON.
-
+> Prettify JavaScript, JSON, HTML and CSS.  
 [jsbeautifier.org](http://jsbeautifier.org/) for gulp
 
 ## Getting Started
 Install the module with: `npm install --save-dev gulp-jsbeautifier`
 
-## Usage
-
-```js
+## Basic Usage
+```javascript
 var gulp = require('gulp');
 var prettify = require('gulp-jsbeautifier');
 
-gulp.task('git-pre-js', function() {
-  gulp.src('./src/foo.js', './src/bar.json')
-    .pipe(prettify({config: '.jsbeautifyrc', mode: 'VERIFY_ONLY'}))
-});
-
-gulp.task('format-js', function() {
-  gulp.src('./src/foo.js', './src/bar.json')
-    .pipe(prettify({config: '.jsbeautifyrc', mode: 'VERIFY_AND_WRITE'}))
-    .pipe(gulp.dest('./dist'))
-});
-
-gulp.task('prettify-html', function() {
-  gulp.src('./src/foo.html')
-    .pipe(prettify({indentSize: 2}))
-    .pipe(gulp.dest('./dist'))
-});
-
-gulp.task('prettify-css', function() {
-  gulp.src('./src/foo.css')
-    .pipe(prettify({indentSize: 2}))
-    .pipe(gulp.dest('./dist'))
+gulp.task('prettify', function() {
+  gulp.src(['./*.css', './*.html', './*.js'])
+    .pipe(prettify())
+    .pipe(gulp.dest('./dist'));
 });
 ```
-Other examples are in the [example folder.](http://github.com/tarunc/gulp-jsbeautifier/tree/master/examples)
 
-See the [js-beautify docs](https://github.com/einars/js-beautify) for options.
+## Options
+All options are optional.
 
-## Config
-#### options.mode (optional)
-Type: `String`
-Default value: `VERIFY_AND_WRITE`
+### Plugin options
+#### `css`, `html`, `js`
+Type: `Object`  
+Default value: `{file_types: [...]}`
 
-If mode is "VERIFY_ONLY", then task will fail if at least one file can be beautified. This is useful for pre-commit check.
-If a filename is specified, options and globals defined therein will be used. The `jsbeautifyrc` file must be valid JSON and looks like the one supported by js-beautify itself.
+Contains specific "[beautifier options](#beautifier-options)"  for CSS, HTML and JavaScript.
 
-#### options.logSuccess (optional)
-Type: `Boolean`
-Default value: `true`
+* **`file_types`**  
+  Type: `Array`  
+  Default value for `css`: `['.css', '.less', '.sass', '.scss']`  
+  Default value for `html`: `['.html']`  
+  Default value for `js`: `['.js', '.json']`
 
-Configures whether to log on success or not. When this is set to `true`, this will print `Beautifying filename.js` for each file. When set to false, it will not print this when it is successful in beautiying the file. This is helpful for debugging purposes. If you are having difficulties, try setting this to `true`.
+  Specifies which files should be treated as CSS, HTML or JavaScript.
 
-#### options.showDiff (optional)
-Type: `Boolean`
-Default value: `true`
+```javascript
+// Specifies that ONLY '*.js' and '.bowerrc' files should be treated as JavaScript.
+gulp.task('prettify', function() {
+  gulp.src(['./*.js', './*.json', './.bowerrc'])
+    .pipe(prettify({
+      js: {
+        file_types: ['.js', '.bowerrc']
+      }
+    }))
+    .pipe(gulp.dest('./'));
+});
 
-Configures whether to print a diff of the file when `mode == "VERIFY_ONLY"`.
+```
 
-#### options.config (optional)
-Type: `String`
+#### `config`
+Type: `String`  
 Default value: `null`
 
-If a filename is specified, options and globals defined therein will be used. The `jsbeautifyrc` file must be valid JSON and looks like the one supported by js-beautify itself.
+If a file is specified, the options defined in it will be loaded.  
+Otherwise, gulp-jsbeautifier will looking for a `.jsbeautifyrc` file in [this places](https://www.npmjs.com/package/rc#standards) and if found, load its options.
 
-### Default options from [js-beautify](https://github.com/einars/js-beautify#options) can be used
+The file specified and the `.jsbeautifyrc` file must be a valid JSON and can contain all the options of this documentation except `config` and `debug`.
+
 ```javascript
-.pipe(prettify({
-    config: "path/to/.jsbeautifyrc",
-    html: {
-        braceStyle: "collapse",
-        indentChar: " ",
-        indentScripts: "keep",
-        indentSize: 4,
-        maxPreserveNewlines: 10,
-        preserveNewlines: true,
-        unformatted: ["a", "sub", "sup", "b", "i", "u"],
-        wrapLineLength: 0
-    },
-    css: {
-        indentChar: " ",
-        indentSize: 4
-    },
-    js: {
-        braceStyle: "collapse",
-        breakChainedMethods: false,
-        e4x: false,
-        evalCode: false,
-        indentChar: " ",
-        indentLevel: 0,
-        indentSize: 4,
-        indentWithTabs: false,
-        jslintHappy: false,
-        keepArrayIndentation: false,
-        keepFunctionIndentation: false,
-        maxPreserveNewlines: 10,
-        preserveNewlines: true,
-        spaceBeforeConditional: true,
-        spaceInParen: false,
-        unescapeStrings: false,
-        wrapLineLength: 0
-    }
-));
-```
-Only specifiy options to overwrite.
+// Use options specified in './config/jsbeautify.json'.
+gulp.task('prettify', function() {
+  gulp.src('./*.js')
+    .pipe(prettify({
+      config: './config/jsbeautify.json'
+    }))
+    .pipe(gulp.dest('./dist'));
+});
 
-**NOTE:** All options can be specified similar to [js-beautify](https://github.com/einars/js-beautify#options) using underscore.
+// Looking for a '.jsbeautifyrc' file and if found, use its options.
+gulp.task('prettify', function() {
+  gulp.src('./*.js')
+    .pipe(prettify())
+    .pipe(gulp.dest('./dist'));
+});
+```
+
+#### `debug`
+Type: `Boolean`  
+Default value: `false`
+
+If `false` shows no debug messages.   
+If `true` shows useful debug messages.   
+If you have difficulty, try setting this to `true` and use the [reporter](#reporter) .
+
+```javascript
+// Shows debug messages.
+gulp.task('prettify', function() {
+  gulp.src(['./*.css', './*.html', './*.js'])
+    .pipe(prettify({
+      debug: true
+    }))
+    .pipe(gulp.dest('./dist'));
+});
+```
+
+### Beautifier options
+The "beautifier options" are the same used by js-beautify with underscore.  
+See the [js-beautify docs](https://github.com/beautify-web/js-beautify) for a list of them.
+
+All "beautifier options" placed in the root, are applied to CSS, HTML and JavaScript, unless there are no specific ones.
+
+```javascript
+// The indentation is 4 for CSS and HTML instead is 2 for JavaScript.
+gulp.task('prettify', function() {
+  gulp.src(['./*.css', './*.html', './*.js'])
+    .pipe(prettify({
+      indent_level: 4,
+      js: {
+        indent_level: 2
+      }
+    }))
+    .pipe(gulp.dest('./dist'));
+});
+```
+
+The options given through parameters in gulp are merged with those given through files.  
+The merge order is from left to right: default, file, parameter.  
+Subsequent options overwrite the previous ones.
+
+```javascript
+// 'config.json'
+{
+  "indent_size": 4,
+  // other options
+  "js": {
+    // other options
+    "indent_size": 2
+  }
+}
+
+// Overwrite the indentention specified in 'config.json' with
+// one tab indentation for all CSS, HTML and JavaScript.
+// All other options in 'config.json' are maintained.
+gulp.task('prettify', function() {
+  gulp.src('./*.css', './*.html', './*.js')
+    .pipe(prettify({
+      config: './config.json',
+      indent_char: "\t",
+      indent_size: 1
+    }))
+    .pipe(gulp.dest('./'));
+});
+```
+## Reporter
+Lists files that have been beautified, those already beautified and those ignored.
+
+```javascript
+var gulp = require('gulp');
+var prettify = require('gulp-jsbeautifier');
+
+gulp.task('prettify', function() {
+  gulp.src(['./*.css', './*.html', './*.js'])
+    .pipe(prettify())
+    .pipe(prettify.reporter())
+    .pipe(gulp.dest('./'));
+});
+```
+
+## Other
+Older options `mode` and `showDiff` are deprecated.  
+Their functions are made available by [gulp-diff](https://www.npmjs.com/package/gulp-diff).
+
+```javascript
+var gulp = require('gulp');
+var prettify = require('gulp-jsbeautifier');
+var diff = require('gulp-diff');
+
+// This is the equivalent of older "mode: 'VERIFY_ONLY'" with "showDiff: true".
+// The task will fail if at least one file can be beautified.
+gulp.task('git-pre-commit', function() {
+  gulp.src(['./dist/*.js'])
+    .pipe(prettify())
+    .pipe(diff())
+    .pipe(diff.reporter({
+      quiet: false,  // if 'true', is the equivalent of "showDiff: false"
+      fail: true
+    }));
+});
+```
 
 ## License
 

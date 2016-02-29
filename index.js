@@ -1,176 +1,171 @@
 /*
  * gulp-jsbeautifier
  * https://github.com/tarunc/gulp-jsbeautifier
- * Copyright (c) 2015 Tarun Chaudhry
+ * Copyright (c) 2015-2016 Tarun Chaudhry
  * Licensed under the MIT license.
  */
 
+'use strict';
 
-var es = require('event-stream');
-var ansidiff = require('ansidiff');
-var prettify = require('js-beautify');
-var gutil = require('gulp-util');
 var _ = require('lodash');
+var beautify = require('js-beautify');
 var fs = require('fs');
+var gutil = require('gulp-util');
 var path = require('path');
+var through = require('through2');
+var log = gutil.log;
+var PluginError = gutil.PluginError;
 
-var stringUtils = require('underscore.string');
+var PLUGIN_NAME = 'gulp-jsbeautifier';
 
-var jsbeautifier = prettify.js;
-var cssbeautifier = prettify.css;
-var htmlbeautifier = prettify.html;
+function prettify(options) {
+  options = options || {};
 
-function convertCamelCaseToUnderScore(config) {
-  var underscoreKey;
-  _.forEach([config.js, config.css, config.html], function(conf) {
-    _.forEach(conf, function(value, key) {
-      underscoreKey = stringUtils.underscored(key);
-      if ('fileTypes' !== key && key !== underscoreKey) {
-        conf[underscoreKey] = value;
-        delete conf[key];
-      }
-    });
-  });
-}
-
-function getFileType(file, config) {
-  var fileType = null;
-  var fileMapping = {
-    js: config.js.fileTypes,
-    css: config.css.fileTypes,
-    html: config.html.fileTypes
-  };
-
-  _.forEach(fileMapping, function(extensions, type) {
-    fileType = type;
-    return -1 === _.findIndex(extensions, function(ext) {
-      return stringUtils.endsWith(file.relative, ext);
-    });
-  });
-
-  // Default fileType is js
-  return fileType || 'js';
-}
-
-function getBeautifierSetup(file, config) {
-  var fileType = getFileType(file, config);
-
-  return {
-    js: [jsbeautifier, config.js, true],
-    css: [cssbeautifier, config.css],
-    html: [htmlbeautifier, config.html]
-  }[fileType];
-}
-
-function beautify(file, config, actionHandler) {
-  var setup = getBeautifierSetup(file, config);
-  if (!setup) {
-    gutil.log('Cannot beautify', gutil.colors.cyan(file.relative), '(only js, css and html files can be beautified)');
-    return;
-  }
-
-  var beautifier = setup[0],
-      beautifyConfig = setup[1],
-      addNewLine = setup[2];
-
-  if (config.logSuccess) {
-    gutil.log('Beautifying', gutil.colors.cyan(file.relative));
-  }
-
-  var original = file.contents.toString('utf8');
-
-  var result = beautifier(original, beautifyConfig);
-  // jsbeautifier would skip the line terminator for js files
-  if (addNewLine) {
-    result += '\n';
-  }
-
-  return actionHandler(file, result);
-}
-
-function verifyActionHandler(cb, params) {
-  return function verifyOnly(file, result) {
-    var fileContents = file.contents.toString('utf8');
-
-    /*jshint eqeqeq: false */
-    if (fileContents == result || fileContents == result.substr(0, result.length - 1)) {
-      return cb(null, file);
+  function debug(string) {
+    if (options.debug === true) {
+      log(string);
     }
+  }
 
-    // return cb(null, file);
-    var errOpts = {
-      message: 'Beautify failed for: ' + file.relative,
-      showStack: false
+  function setup(options) {
+    var cfg = {
+      defaults: {
+        config: null,
+        debug: false,
+        css: {
+          file_types: ['.css', '.less', '.sass', '.scss']
+        },
+        html: {
+          file_types: ['.html']
+        },
+        js: {
+          file_types: ['.js', '.json']
+        }
+      },
+      file: {},
+      params: {},
+      final: {}
     };
 
-    if (params.showDiff) {
-      errOpts.message += '\n\n' + ansidiff.chars(fileContents, result);
+    // Load 'params' options
+    _.assign(cfg.params, options);
+
+    // Load 'file' options
+    try {
+      if (cfg.params.config) {
+        // Load the configuration file.
+        _.assign(cfg.file, JSON.parse(fs.readFileSync(path.resolve(cfg.params.config))));
+
+        debug("Configuration file loaded: " + JSON.stringify(cfg.params.config));
+      } else {
+        // Search and load the '.jsbeautifyrc' file
+        require('rc')('jsbeautify', cfg.file);
+
+        if (cfg.file.configs) {
+          debug("Configuration files loaded:\n" + JSON.stringify(cfg.file.configs, null, 2));
+        }
+
+        // Delete properties added by 'rc'
+        delete cfg.file._;
+        delete cfg.file.configs;
+      }
+    } catch (err) {
+      throw new PluginError(PLUGIN_NAME, err, {
+        showStack: true
+      });
     }
 
-    return cb(new gutil.PluginError('gulp-jsbeautifier', errOpts, { showStack: false }), file);
-  };
-}
+    // Delete properties not used
+    delete cfg.file.debug;
+    delete cfg.file.config;
 
-function verifyAndWriteActionHandler(cb) {
-  return function verifyAndWrite(file, result) {
-    file.contents = new Buffer(result, 'utf8');
-    return cb(null, file);
-  };
-}
+    // Merge plugin options
+    _.assign(cfg.final, cfg.defaults, cfg.file, cfg.params);
 
-module.exports = function prettify(params) {
-  'use strict';
+    // Merge beautifier options
+    cfg.final.css = _.assign({}, cfg.defaults.css, cfg.file, cfg.file.css, cfg.params, cfg.params.css);
+    cfg.final.html = _.assign({}, cfg.defaults.html, cfg.file, cfg.file.html, cfg.params, cfg.params.html);
+    cfg.final.js = _.assign({}, cfg.defaults.js, cfg.file, cfg.file.js, cfg.params, cfg.params.js);
 
-  params = _.defaults(params || {}, {
-    mode: 'VERIFY_AND_WRITE',
-    js: {},
-    css: {},
-    html: {},
-    logSuccess: true,
-    showStack: false,
-    showDiff: true
-  });
+    // Delete plugin options from beautifier options
+    for (var property in cfg.defaults) {
+      delete cfg.final.css[property];
+      delete cfg.final.html[property];
+      delete cfg.final.js[property];
+    }
 
-  var config = {
-    js: {},
-    css: {},
-    html: {}
-  };
+    // Delete beautifier options from plugin options
+    for (var property in cfg.final) {
+      if (!(property in cfg.defaults))
+        delete cfg.final[property];
+    }
 
-  var baseConfig = {};
-  var baseConfigRoot = _.omit(params, 'js', 'css', 'html');
-  var rcFile = require('rc')('jsbeautify', {});
-
-  if (params.config || !_.isEqual(rcFile, {})) {
-    var baseConfig = params.config ? JSON.parse(fs.readFileSync(path.resolve(params.config))) : rcFile;
+    return cfg.final;
   }
 
-  _.extend(config.js, baseConfigRoot, baseConfig, baseConfig.js || {}, params.js);
-  _.extend(config.css, baseConfigRoot, baseConfig, baseConfig.css || {}, params.css);
-  _.extend(config.html, baseConfigRoot, baseConfig, baseConfig.html || {}, params.html);
-  _.extend(config, _.omit(params, 'js', 'css', 'html'));
+  var config = setup(options);
+  debug("Configuration used:\n" + JSON.stringify(config, null, 2));
 
-  config.js.fileTypes = _.union(config.js.fileTypes, ['.js', '.json']);
-  config.css.fileTypes = _.union(config.css.fileTypes, ['.css', '.scss', '.sass', '.less']);
-  config.html.fileTypes = _.union(config.html.fileTypes, ['.html']);
+  return through.obj(function(file, encoding, callback) {
 
-  convertCamelCaseToUnderScore(config);
-
-  var actionHandler = 'VERIFY_ONLY' === config.mode ? verifyActionHandler : verifyAndWriteActionHandler;
-
-  return es.map(function(file, cb) {
     if (file.isNull()) {
-      return cb(null, file); // pass along
+      callback(null, file);
+      return;
     }
 
     if (file.isStream()) {
-      return cb(new gutil.PluginError('gulp-jsbeautifier', 'Streaming not supported'));
+      callback(new PluginError(PLUGIN_NAME, 'Streaming not supported'));
+      return;
     }
 
-    try {
-      return beautify(file, config, actionHandler(cb, params));
-    } catch (err) {
-      return cb(new gutil.PluginError('gulp-jsbeautifier', err, params));
+    var oldContent = file.contents.toString('utf8');
+    var type = null;
+
+    // Check if the file should be treated as JavaScript, HTML or CSS
+    ['js', 'css', 'html'].some(function(value) {
+      if (config[value].file_types.some(function(ext) {
+          return _.endsWith(file.basename, ext);
+        })) {
+        type = value;
+        return true;
+      }
+    });
+
+    // Initialize properties for reporter
+    file.jsbeautify = {};
+    file.jsbeautify.type = type;
+    file.jsbeautify.beautified = false;
+
+    if (type) {
+      var newContent = beautify[type](oldContent, config[type]);
+
+      file.contents = new Buffer(newContent);
+
+      if (oldContent.toString() !== newContent.toString()) {
+        file.jsbeautify.beautified = true;
+      }
     }
+
+    callback(null, file);
+  });
+}
+
+function reporter() {
+  return through.obj(function(file, encoding, callback) {
+    if (file.hasOwnProperty('jsbeautify')) {
+      if (file.jsbeautify.type === null) {
+        log('File type not specified for', gutil.colors.cyan(file.relative));
+      } else if (file.jsbeautify.beautified === true) {
+        log('Beautified', gutil.colors.cyan(file.relative), '[' + file.jsbeautify.type + ']');
+      } else {
+        log('Already beautified', gutil.colors.cyan(file.relative), '[' + file.jsbeautify.type + ']');
+      }
+    }
+
+    callback(null, file);
   });
 };
+
+// Exporting the plugin functions
+module.exports = prettify;
+module.exports.reporter = reporter;

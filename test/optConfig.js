@@ -57,7 +57,7 @@ function newVinyl(filename, contents) {
   });
 };
 
-describe('Test \'config\' option specifying a config file', function() {
+describe('Specifying a file with \'config\' option', function() {
   before(function() {
     fs.writeFileSync(configFile.path, JSON.stringify(configFile.contents));
   });

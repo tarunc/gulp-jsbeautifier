@@ -64,7 +64,7 @@ function newVinyl(filename, contents) {
   });
 };
 
-describe('Test \'file_type\' option', function() {
+describe('Changing the \'file_type\' option', function() {
   files1.forEach(function(file) {
     it('should not beautify \'' + file.name + '\'', function(done) {
       var stream = beautify(options);

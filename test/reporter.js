@@ -58,7 +58,7 @@ function newVinyl(filename, contents) {
   });
 };
 
-describe('Test reporter', function() {
+describe('Reporter', function() {
   files1.forEach(function(file) {
     it('should report \'Beautified\' for \'' + file.name + '\'', function(done) {
       var stream = beautify();
@@ -84,7 +84,7 @@ describe('Test reporter', function() {
   });
 
   files1.forEach(function(file) {
-    it('should report \'Equal\' for \'' + file.name + '\'', function(done) {
+    it('should report \'Already beautified\' for \'' + file.name + '\'', function(done) {
       var stream = beautify();
       var vinylFile = newVinyl(file.name, new Buffer(file.contents.expected));
 

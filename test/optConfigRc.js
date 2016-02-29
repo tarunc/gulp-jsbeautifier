@@ -60,7 +60,7 @@ function newVinyl(filename, contents) {
   });
 };
 
-describe('Test \'config\' option automatically loading \'.jsbeautifyrc\'', function() {
+describe('Automatically loading the \'.jsbeautifyrc\' file', function() {
   before(function() {
     fs.writeFileSync(configFile.path, JSON.stringify(configFile.contents));
   });

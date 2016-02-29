@@ -60,7 +60,7 @@ function newVinyl(filename, contents) {
   });
 };
 
-describe('Test merge options priority', function() {
+describe('Overwriting the \'config file options\' with \'parameters options\'', function() {
   before(function() {
     fs.writeFileSync(configFile.path, JSON.stringify(configFile.contents));
   });

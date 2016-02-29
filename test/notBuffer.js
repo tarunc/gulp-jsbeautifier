@@ -15,8 +15,8 @@ function newVinyl(filename, contents) {
   });
 };
 
-describe('Test stream and null contents', function() {
-  it('should ignore file when contents isNull()', function(done) {
+describe('When file.contents is not a Buffer', function() {
+  it('should ignore file when file.isNull()', function(done) {
     var stream = beautify();
     var vinylFile = newVinyl('nullFile.js', null);
 
@@ -34,7 +34,7 @@ describe('Test stream and null contents', function() {
     stream.write(vinylFile);
   });
 
-  it('should emit error when contents isStream()', function(done) {
+  it('should emit error when file.isStream()', function(done) {
     var stream = beautify();
     var vinylFile = {
       'isNull': function() {

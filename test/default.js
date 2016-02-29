@@ -52,7 +52,7 @@ function newVinyl(filename, contents) {
   });
 };
 
-describe('Test default options', function() {
+describe('With the default options', function() {
   files1.forEach(function(file) {
     it('should beautify \'' + file.name + '\'', function(done) {
       var stream = beautify();

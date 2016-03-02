@@ -1,3 +1,10 @@
+2.0.1 / 2016-03-02
+==================
+
+  * Improved tests
+  * Code refactoring
+  * Fixed an issue with file path
+
 2.0.0 / 2016-03-01
 ==================
 

@@ -144,14 +144,14 @@ gulp.task('prettify', function() {
   gulp.src('./*.css', './*.html', './*.js')
     .pipe(prettify({
       config: './config.json',
-      indent_char: "\t",
+      indent_char: '\t',
       indent_size: 1
     }))
     .pipe(gulp.dest('./'));
 });
 ```
 ## Reporter
-Lists files that have been beautified, those already beautified and those ignored.
+Lists files that have been beautified, those already beautified and those that cannot be beautified.
 
 ```javascript
 var gulp = require('gulp');

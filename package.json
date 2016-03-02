@@ -31,9 +31,10 @@
     "through2": "^2.0.1"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "del": "^2.2.0",
     "mocha": "^2.4.5",
-    "should": "^8.2.2"
+    "sinon": "^1.17.3"
   },
   "keywords": [
     "beautify",

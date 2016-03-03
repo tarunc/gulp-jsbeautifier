@@ -14,7 +14,7 @@ function newVinyl(filename, contents) {
     path: filePath,
     contents: contents
   });
-};
+}
 
 describe('prettify.reporter()', function () {
   beforeEach(function () {

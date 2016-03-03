@@ -16,9 +16,17 @@ function newVinyl(filename, contents) {
     path: filePath,
     contents: contents
   });
-};
+}
 
 describe('prettify()', function () {
+  beforeEach(function () {
+    sinon.spy(console, 'log');
+  });
+
+  afterEach(function () {
+    console.log.restore();
+  });
+
   it('should ignore file when file.isNull()', function (done) {
     var stream = beautify();
     var vinylFile = newVinyl('nullFile', null);
@@ -32,6 +40,7 @@ describe('prettify()', function () {
       expect(newFile.relative.toString()).to.equal('nullFile');
       expect(newFile.contents).to.be.null;
       expect(newFile.jsbeautify).to.be.undefined;
+      expect(console.log.called).to.be.false;
       done();
     });
     stream.write(vinylFile);
@@ -51,6 +60,34 @@ describe('prettify()', function () {
     stream.on('error', function (err) {
       expect(err.message).to.exist;
       expect(err.message).to.equal('Streaming not supported');
+      done();
+    });
+    stream.write(vinylFile);
+  });
+
+  it('should show debug messages when \'debug\' options is true', function (done) {
+    var stream = beautify({
+      debug: true
+    });
+    var vinylFile = newVinyl('file.js', new Buffer(''));
+    vinylFile.jsbeautify = {};
+    vinylFile.jsbeautify.type = null;
+    vinylFile.jsbeautify.beautified = false;
+
+    stream.on('error', done);
+    stream.on('data', function (newFile) {
+      expect(newFile).to.exist;
+      expect(newFile.path).to.exist;
+      expect(newFile.path.toString()).to.equal(path.join(__dirname, 'fixtures', 'file.js'));
+      expect(newFile.relative).to.exist;
+      expect(newFile.relative.toString()).to.equal('file.js');
+      expect(newFile.contents).to.exist;
+      expect(newFile.contents.toString()).to.equal('');
+      expect(newFile.jsbeautify).to.exist;
+      expect(newFile.jsbeautify.type).to.equal('js');
+      expect(newFile.jsbeautify.beautified).to.exist;
+      expect(newFile.jsbeautify.beautified).to.be.false;
+      expect(console.log.called).to.be.true;
       done();
     });
     stream.write(vinylFile);
@@ -119,6 +156,7 @@ describe('prettify()', function () {
           expect(newFile.jsbeautify.beautified).to.be.true;
           expect(newFile.jsbeautify.type).to.exist;
           expect(newFile.jsbeautify.type).to.equal(file.type);
+          expect(console.log.called).to.be.false;
           done();
         });
         stream.write(vinylFile);
@@ -142,6 +180,7 @@ describe('prettify()', function () {
           expect(newFile.jsbeautify.beautified).to.exist;
           expect(newFile.jsbeautify.beautified).to.be.false;
           expect(newFile.jsbeautify.type).to.be.null;
+          expect(console.log.called).to.be.false;
           done();
         });
         stream.write(vinylFile);
@@ -220,6 +259,7 @@ describe('prettify()', function () {
           expect(newFile.jsbeautify.beautified).to.be.true;
           expect(newFile.jsbeautify.type).to.exist;
           expect(newFile.jsbeautify.type).to.equal(file.type);
+          expect(console.log.called).to.be.false;
           done();
         });
         stream.write(vinylFile);
@@ -301,6 +341,7 @@ describe('prettify()', function () {
           expect(newFile.jsbeautify.beautified).to.be.true;
           expect(newFile.jsbeautify.type).to.exist;
           expect(newFile.jsbeautify.type).to.equal(file.type);
+          expect(console.log.called).to.be.false;
           done();
         });
         stream.write(vinylFile);
@@ -382,6 +423,7 @@ describe('prettify()', function () {
           expect(newFile.jsbeautify.beautified).to.exist;
           expect(newFile.jsbeautify.beautified).to.be.false;
           expect(newFile.jsbeautify.type).to.be.null;
+          expect(console.log.called).to.be.false;
           done();
         });
         stream.write(vinylFile);
@@ -407,6 +449,7 @@ describe('prettify()', function () {
           expect(newFile.jsbeautify.beautified).to.be.true;
           expect(newFile.jsbeautify.type).to.exist;
           expect(newFile.jsbeautify.type).to.equal(file.type);
+          expect(console.log.called).to.be.false;
           done();
         });
         stream.write(vinylFile);
@@ -488,6 +531,7 @@ describe('prettify()', function () {
           expect(newFile.jsbeautify.beautified).to.be.true;
           expect(newFile.jsbeautify.type).to.exist;
           expect(newFile.jsbeautify.type).to.equal(file.type);
+          expect(console.log.called).to.be.false;
           done();
         });
         stream.write(vinylFile);

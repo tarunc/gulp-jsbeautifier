@@ -25,38 +25,21 @@ describe('prettify.reporter()', function () {
     console.log.restore();
   });
 
-  it('should ignore file when file.isNull()', function (done) {
+  it('should not report anything if prettify() has not been called', function (done) {
     var stream = beautify.reporter();
-    var vinylFile = newVinyl('nullfile', null);
+    var vinylFile = newVinyl('file.js', new Buffer(''));
 
     stream.on('error', done);
     stream.on('data', function (newFile) {
       expect(newFile).to.exist;
       expect(newFile.path).to.exist;
-      expect(newFile.path.toString()).to.equal(path.join(__dirname, 'fixtures', 'nullfile'));
+      expect(newFile.path.toString()).to.equal(path.join(__dirname, 'fixtures', 'file.js'));
       expect(newFile.relative).to.exist;
-      expect(newFile.relative.toString()).to.equal('nullfile');
-      expect(newFile.contents).to.be.null;
+      expect(newFile.relative.toString()).to.equal('file.js');
+      expect(newFile.contents).to.exist;
+      expect(newFile.contents.toString()).to.equal('');
       expect(newFile.jsbeautify).to.be.undefined;
-      done();
-    });
-    stream.write(vinylFile);
-  });
-
-  it('should emit error when file.isStream()', function (done) {
-    var stream = beautify.reporter();
-    var vinylFile = {
-      isNull: function () {
-        return false;
-      },
-      isStream: function () {
-        return true;
-      }
-    };
-
-    stream.on('error', function (err) {
-      expect(err.message).to.exist;
-      expect(err.message).to.equal('Streaming not supported');
+      expect(console.log.called).to.be.false;
       done();
     });
     stream.write(vinylFile);
@@ -71,6 +54,18 @@ describe('prettify.reporter()', function () {
 
     stream.on('error', done);
     stream.on('data', function (newFile) {
+      expect(newFile).to.exist;
+      expect(newFile.path).to.exist;
+      expect(newFile.path.toString()).to.equal(path.join(__dirname, 'fixtures', 'file.js'));
+      expect(newFile.relative).to.exist;
+      expect(newFile.relative.toString()).to.equal('file.js');
+      expect(newFile.contents).to.exist;
+      expect(newFile.contents.toString()).to.equal('');
+      expect(newFile.jsbeautify).to.exist;
+      expect(newFile.jsbeautify.type).to.exist;
+      expect(newFile.jsbeautify.type).to.equal('js');
+      expect(newFile.jsbeautify.beautified).to.exist;
+      expect(newFile.jsbeautify.beautified).to.be.true;
       expect(console.log.calledOnce).to.be.true;
       expect(console.log.calledWithExactly('Beautified ' + gutil.colors.cyan('file.js') + ' [js]')).to.be.true;
       done();
@@ -78,7 +73,7 @@ describe('prettify.reporter()', function () {
     stream.write(vinylFile);
   });
 
-  it('should report which files are already beautified.', function (done) {
+  it('should report which files are already beautified', function (done) {
     var stream = beautify.reporter();
     var vinylFile = newVinyl('file.js', new Buffer(''));
     vinylFile.jsbeautify = {};
@@ -87,6 +82,18 @@ describe('prettify.reporter()', function () {
 
     stream.on('error', done);
     stream.on('data', function (newFile) {
+      expect(newFile).to.exist;
+      expect(newFile.path).to.exist;
+      expect(newFile.path.toString()).to.equal(path.join(__dirname, 'fixtures', 'file.js'));
+      expect(newFile.relative).to.exist;
+      expect(newFile.relative.toString()).to.equal('file.js');
+      expect(newFile.contents).to.exist;
+      expect(newFile.contents.toString()).to.equal('');
+      expect(newFile.jsbeautify).to.exist;
+      expect(newFile.jsbeautify.type).to.exist;
+      expect(newFile.jsbeautify.type).to.equal('js');
+      expect(newFile.jsbeautify.beautified).to.exist;
+      expect(newFile.jsbeautify.beautified).to.be.false;
       expect(console.log.calledOnce).to.be.true;
       expect(console.log.calledWithExactly('Already beautified ' + gutil.colors.cyan('file.js') + ' [js]')).to.be.true;
       done();
@@ -94,15 +101,26 @@ describe('prettify.reporter()', function () {
     stream.write(vinylFile);
   });
 
-  it('should report which files can not be beautified.', function (done) {
+  it('should report which files can not be beautified', function (done) {
     var stream = beautify.reporter();
     var vinylFile = newVinyl('file.js', new Buffer(''));
     vinylFile.jsbeautify = {};
     vinylFile.jsbeautify.type = null;
-    vinylFile.jsbeautify.beautified = true;
+    vinylFile.jsbeautify.beautified = false;
 
     stream.on('error', done);
     stream.on('data', function (newFile) {
+      expect(newFile).to.exist;
+      expect(newFile.path).to.exist;
+      expect(newFile.path.toString()).to.equal(path.join(__dirname, 'fixtures', 'file.js'));
+      expect(newFile.relative).to.exist;
+      expect(newFile.relative.toString()).to.equal('file.js');
+      expect(newFile.contents).to.exist;
+      expect(newFile.contents.toString()).to.equal('');
+      expect(newFile.jsbeautify).to.exist;
+      expect(newFile.jsbeautify.type).to.be.null;
+      expect(newFile.jsbeautify.beautified).to.exist;
+      expect(newFile.jsbeautify.beautified).to.be.false;
       expect(console.log.calledOnce).to.be.true;
       expect(console.log.calledWithExactly('Cannot beautify ' + gutil.colors.cyan('file.js'))).to.be.true;
       done();

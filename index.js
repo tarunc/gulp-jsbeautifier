@@ -46,57 +46,54 @@ function setup(options) {
     final: {}
   };
 
-  // Load 'params' options
+  // Load 'parameters options'
   _.assign(cfg.params, options);
 
-  // Load 'file' options
-  try {
-    if (cfg.params.config) {
-      // Load the configuration file.
-      _.assign(cfg.file, JSON.parse(fs.readFileSync(path.resolve(cfg.params.config))));
+  // Load 'file options'
+  if (cfg.params.config) {
+    // Load the configuration file.
+    _.assign(cfg.file, JSON.parse(fs.readFileSync(path.resolve(cfg.params.config))));
 
-      debug("Configuration file loaded: " + JSON.stringify(cfg.params.config), options.debug);
-    } else {
-      // Search and load the '.jsbeautifyrc' file
-      require('rc')('jsbeautify', cfg.file);
+    debug("Configuration file loaded: " + JSON.stringify(cfg.params.config), options.debug);
+  } else {
+    // Search and load the '.jsbeautifyrc' file
+    require('rc')('jsbeautify', cfg.file);
 
-      if (cfg.file.configs) {
-        debug("Configuration files loaded:\n" + JSON.stringify(cfg.file.configs, null, 2), options.debug);
-      }
-
-      // Delete properties added by 'rc'
-      delete cfg.file._;
-      delete cfg.file.configs;
+    if (cfg.file.configs) {
+      debug("Configuration files loaded:\n" + JSON.stringify(cfg.file.configs, null, 2), options.debug);
     }
-  } catch (err) {
-    throw new PluginError(PLUGIN_NAME, err, {
-      showStack: true
-    });
+
+    // Delete properties added by 'rc'
+    delete cfg.file._;
+    delete cfg.file.configs;
   }
 
   // Delete properties not used
   delete cfg.file.debug;
   delete cfg.file.config;
 
-  // Merge plugin options
+  // Merge 'plugin options'
   _.assign(cfg.final, cfg.defaults, cfg.file, cfg.params);
 
-  // Merge beautifier options
+  // Merge 'beautifier options'
   cfg.final.css = _.assign({}, cfg.defaults.css, cfg.file, cfg.file.css, cfg.params, cfg.params.css);
   cfg.final.html = _.assign({}, cfg.defaults.html, cfg.file, cfg.file.html, cfg.params, cfg.params.html);
   cfg.final.js = _.assign({}, cfg.defaults.js, cfg.file, cfg.file.js, cfg.params, cfg.params.js);
 
-  // Delete plugin options from beautifier options
-  for (var property in cfg.defaults) {
+  var property;
+
+  // Delete 'plugin options' from 'beautifier options'
+  for (property in cfg.defaults) {
     delete cfg.final.css[property];
     delete cfg.final.html[property];
     delete cfg.final.js[property];
   }
 
-  // Delete beautifier options from plugin options
-  for (var property in cfg.final) {
-    if (!(property in cfg.defaults))
+  // Delete 'beautifier options' from 'plugin options'
+  for (property in cfg.final) {
+    if (!(property in cfg.defaults)) {
       delete cfg.final[property];
+    }
   }
 
   return cfg.final;
@@ -108,7 +105,6 @@ function prettify(options) {
   debug('Configuration used:\n' + JSON.stringify(config, null, 2), config.debug);
 
   return through.obj(function (file, encoding, callback) {
-
     if (file.isNull()) {
       callback(null, file);
       return;
@@ -154,33 +150,21 @@ function prettify(options) {
 
 function reporter() {
   return through.obj(function (file, encoding, callback) {
-    if (file.isNull()) {
-      callback(null, file);
-      return;
-    }
-
-    if (file.isStream()) {
-      callback(new PluginError(PLUGIN_NAME, 'Streaming not supported'));
-      return;
-    }
-
-    if (file.jsbeautify.type === null) {
-      log('Cannot beautify ' + gutil.colors.cyan(file.relative));
-      callback(null, file);
-      return;
-    }
-
-    if (file.jsbeautify.beautified === true) {
-      log('Beautified ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
-    }
-
-    if (file.jsbeautify.beautified === false) {
-      log('Already beautified ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
+    if (file.jsbeautify) {
+      if (file.jsbeautify.type === null) {
+        log('Cannot beautify ' + gutil.colors.cyan(file.relative));
+      } else {
+        if (file.jsbeautify.beautified === true) {
+          log('Beautified ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
+        } else {
+          log('Already beautified ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
+        }
+      }
     }
 
     callback(null, file);
   });
-};
+}
 
 // Exporting the plugin functions
 module.exports = prettify;

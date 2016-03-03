@@ -21,7 +21,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "coverage": "jscoverage index.js index-cov.js; COVERAGE=1 mocha --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js"
+    "cover": "istanbul cover _mocha"
   },
   "dependencies": {
     "gulp-util": "^3.0.7",
@@ -32,7 +32,9 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "coveralls": "^2.11.8",
     "del": "^2.2.0",
+    "istanbul": "^0.4.2",
     "mocha": "^2.4.5",
     "sinon": "^1.17.3"
   },
@@ -53,10 +55,5 @@
     "javascript beautify",
     "css beautify",
     "json beautify"
-  ],
-  "config": {
-    "blanket": {
-      "pattern": "gulp-jsbeautifier/index.js"
-    }
-  }
+  ]
 }

@@ -16,6 +16,12 @@
   },
   "license": "MIT",
   "main": "index.js",
+  "files": [
+    "LICENSE.md",
+    "README.md",
+    "History.md",
+    "index.js"
+  ],
   "engines": {
     "node": ">=0.10.0"
   },

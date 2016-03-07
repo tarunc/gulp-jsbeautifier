@@ -76,20 +76,20 @@ function setup(options) {
   _.assign(cfg.final, cfg.defaults, cfg.file, cfg.params);
 
   // Merge 'beautifier options'
-  cfg.final.css = _.assign({}, cfg.defaults.css, cfg.file, cfg.file.css, cfg.params, cfg.params.css);
-  cfg.final.html = _.assign({}, cfg.defaults.html, cfg.file, cfg.file.html, cfg.params, cfg.params.html);
-  cfg.final.js = _.assign({}, cfg.defaults.js, cfg.file, cfg.file.js, cfg.params, cfg.params.js);
+  ['css', 'html', 'js'].forEach(function (type) {
+    cfg.final[type] = _.assign({}, cfg.defaults[type], cfg.file, cfg.file[type], cfg.params, cfg.params[type]);
+  });
 
   // Delete 'plugin options' from 'beautifier options'
-  for (property in cfg.defaults) {
-    delete cfg.final.css[property];
-    delete cfg.final.html[property];
-    delete cfg.final.js[property];
-  }
+  ['css', 'html', 'js'].forEach(function (type) {
+    for (property in cfg.defaults) {
+      delete cfg.final[type][property];
+    }
+  });
 
   // Delete 'beautifier options' from 'plugin options'
   for (property in cfg.final) {
-    if (!(property in cfg.defaults)) {
+    if (!cfg.defaults.hasOwnProperty(property)) {
       delete cfg.final[property];
     }
   }

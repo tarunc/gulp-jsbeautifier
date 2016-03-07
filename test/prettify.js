@@ -49,10 +49,10 @@ describe('prettify()', function () {
   it('should emit error when file.isStream()', function (done) {
     var stream = beautify();
     var vinylFile = {
-      'isNull': function () {
+      isNull: function () {
         return false;
       },
-      'isStream': function () {
+      isStream: function () {
         return true;
       }
     };
@@ -107,7 +107,7 @@ describe('prettify()', function () {
         fixture: 'var foo={bar:1,baz:2};',
         expected: 'var foo = {\n    bar: 1,\n    baz: 2\n};'
       }
-    }
+    };
 
     var files1 = [{
       name: 'file.css',
@@ -197,7 +197,7 @@ describe('prettify()', function () {
           indent_size: 3
         }
       }
-    }
+    };
 
     var options = {
       config: configFile.path
@@ -216,7 +216,7 @@ describe('prettify()', function () {
         fixture: 'var foo={bar:1,baz:2};',
         expected: 'var foo = {\n  bar: 1,\n  baz: 2\n};'
       }
-    }
+    };
 
     var files = [{
       name: 'file.css',
@@ -276,13 +276,6 @@ describe('prettify()', function () {
           indent_size: 5
         }
       }
-    }
-
-    var options = {
-      indent_size: 1,
-      css: {
-        indent_size: 5
-      }
     };
 
     var contents = {
@@ -298,7 +291,7 @@ describe('prettify()', function () {
         fixture: 'var foo={bar:1,baz:2};',
         expected: 'var foo = {\n bar: 1,\n baz: 2\n};'
       }
-    }
+    };
 
     var files = [{
       name: 'file.css',
@@ -375,7 +368,7 @@ describe('prettify()', function () {
         fixture: 'var foo={bar:1,baz:2};',
         expected: 'var foo = {\n    bar: 1,\n    baz: 2\n};'
       }
-    }
+    };
 
     var files1 = [{
       name: 'file.css',
@@ -466,7 +459,7 @@ describe('prettify()', function () {
           indent_size: 2
         }
       }
-    }
+    };
 
     var options = {
       config: configFile.path,
@@ -488,7 +481,7 @@ describe('prettify()', function () {
         fixture: 'var foo={bar:1,baz:2};',
         expected: 'var foo = {\n bar: 1,\n baz: 2\n};'
       }
-    }
+    };
 
     var files = [{
       name: 'file.css',
@@ -538,5 +531,4 @@ describe('prettify()', function () {
       });
     });
   });
-
 });

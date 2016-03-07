@@ -25,8 +25,6 @@ function debug(string, show) {
 }
 
 function setup(options) {
-  options = options || {};
-
   var cfg = {
     defaults: {
       config: null,
@@ -46,6 +44,8 @@ function setup(options) {
     final: {}
   };
 
+  var property;
+
   // Load 'parameters options'
   _.assign(cfg.params, options);
 
@@ -54,13 +54,13 @@ function setup(options) {
     // Load the configuration file.
     _.assign(cfg.file, JSON.parse(fs.readFileSync(path.resolve(cfg.params.config))));
 
-    debug("Configuration file loaded: " + JSON.stringify(cfg.params.config), options.debug);
+    debug('Configuration file loaded: ' + JSON.stringify(cfg.params.config), cfg.params.debug);
   } else {
     // Search and load the '.jsbeautifyrc' file
     require('rc')('jsbeautify', cfg.file);
 
     if (cfg.file.configs) {
-      debug("Configuration files loaded:\n" + JSON.stringify(cfg.file.configs, null, 2), options.debug);
+      debug('Configuration files loaded:\n' + JSON.stringify(cfg.file.configs, null, 2), cfg.params.debug);
     }
 
     // Delete properties added by 'rc'
@@ -80,8 +80,6 @@ function setup(options) {
   cfg.final.html = _.assign({}, cfg.defaults.html, cfg.file, cfg.file.html, cfg.params, cfg.params.html);
   cfg.final.js = _.assign({}, cfg.defaults.js, cfg.file, cfg.file.js, cfg.params, cfg.params.js);
 
-  var property;
-
   // Delete 'plugin options' from 'beautifier options'
   for (property in cfg.defaults) {
     delete cfg.final.css[property];
@@ -96,15 +94,19 @@ function setup(options) {
     }
   }
 
+  debug('Configuration used:\n' + JSON.stringify(cfg.final, null, 2), cfg.params.debug);
+
   return cfg.final;
 }
 
 function prettify(options) {
   var config = setup(options);
 
-  debug('Configuration used:\n' + JSON.stringify(config, null, 2), config.debug);
-
   return through.obj(function (file, encoding, callback) {
+    var oldContent;
+    var newContent;
+    var type = null;
+
     if (file.isNull()) {
       callback(null, file);
       return;
@@ -115,18 +117,16 @@ function prettify(options) {
       return;
     }
 
-    var oldContent = file.contents.toString('utf8');
-    var type = null;
-
     // Check if current file should be treated as JavaScript, HTML, CSS or if it should be ignored
     ['js', 'css', 'html'].some(function (value) {
       // Check if at least one element in 'file_types' is suffix of file basename
       if (config[value].file_types.some(function (suffix) {
-          return _.endsWith(path.basename(file.path), suffix);
-        })) {
+        return _.endsWith(path.basename(file.path), suffix);
+      })) {
         type = value;
         return true;
       }
+
       return false;
     });
 
@@ -136,7 +136,8 @@ function prettify(options) {
     file.jsbeautify.beautified = false;
 
     if (type) {
-      var newContent = beautify[type](oldContent, config[type]);
+      oldContent = file.contents.toString('utf8');
+      newContent = beautify[type](oldContent, config[type]);
 
       if (oldContent.toString() !== newContent.toString()) {
         file.contents = new Buffer(newContent);

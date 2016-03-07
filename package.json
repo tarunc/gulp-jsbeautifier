@@ -27,6 +27,7 @@
   },
   "scripts": {
     "test": "mocha",
+    "lint": "eslint . --ignore-path .gitignore",
     "cover": "istanbul cover _mocha"
   },
   "dependencies": {
@@ -40,6 +41,8 @@
     "chai": "^3.5.0",
     "coveralls": "^2.11.8",
     "del": "^2.2.0",
+    "eslint": "^2.3.0",
+    "eslint-config-airbnb": "^6.1.0",
     "istanbul": "^0.4.2",
     "mocha": "^2.4.5",
     "sinon": "^1.17.3"

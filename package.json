@@ -26,9 +26,11 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha",
     "lint": "eslint . --ignore-path .gitignore",
-    "cover": "istanbul cover _mocha"
+    "pretest": "npm run lint",
+    "test": "mocha",
+    "cover": "istanbul cover _mocha",
+    "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
   "dependencies": {
     "gulp-util": "^3.0.7",

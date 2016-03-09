@@ -1,3 +1,8 @@
+Next
+==================
+  * Lint code before testing
+  * Include in the package only the required files to run it
+
 2.0.2 / 2016-03-03
 ==================
   * Added tests for `debug` option

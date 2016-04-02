@@ -17,9 +17,9 @@
   "license": "MIT",
   "main": "index.js",
   "files": [
+    "CHANGELOG.md",
     "LICENSE.md",
     "README.md",
-    "History.md",
     "index.js"
   ],
   "engines": {

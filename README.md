@@ -7,10 +7,12 @@
 [![devDependency Status](https://david-dm.org/tarunc/gulp-jsbeautifier/dev-status.png)](https://david-dm.org/tarunc/gulp-jsbeautifier#info=devDependencies)
 
 > Prettify JavaScript, JSON, HTML and CSS.  
-[jsbeautifier.org](http://jsbeautifier.org/) for gulp
+[jsbeautifier.org](http://jsbeautifier.org/) for gulp.
 
-## Getting Started
-Install the module with: `npm install --save-dev gulp-jsbeautifier`
+## Install
+```sh
+npm install --save-dev gulp-jsbeautifier
+```
 
 ## Basic Usage
 ```javascript
@@ -30,7 +32,7 @@ All options are optional.
 ### Plugin options
 #### `css`, `html`, `js`
 Type: `Object`  
-Default value: `{file_types: [...]}`
+Default value: `{ file_types: [...] }`
 
 Contains specific "[beautifier options](#beautifier-options)"  for CSS, HTML and JavaScript.
 
@@ -53,7 +55,6 @@ gulp.task('prettify', function() {
     }))
     .pipe(gulp.dest('./'));
 });
-
 ```
 
 #### `config`
@@ -89,7 +90,7 @@ Default value: `false`
 
 If `false` shows no debug messages.   
 If `true` shows useful debug messages.   
-If you have difficulty, try setting this to `true` and use the [reporter](#reporter) .
+If you have difficulty, try setting this to `true` and use the [reporter](#reporter).
 
 ```javascript
 // Shows debug messages.
@@ -103,7 +104,7 @@ gulp.task('prettify', function() {
 ```
 
 ### Beautifier options
-The "beautifier options" are the same used by js-beautify with underscore.  
+The "beautifier options" are the same underscored options used by js-beautify.  
 See the [js-beautify docs](https://github.com/beautify-web/js-beautify) for a list of them.
 
 All "beautifier options" placed in the root, are applied to CSS, HTML and JavaScript, unless there are no specific ones.
@@ -123,13 +124,16 @@ gulp.task('prettify', function() {
 ```
 
 The options given through parameters in gulp are merged with those given through files.  
-The merge order is from left to right: default, file, parameter.  
+The merge order is: default values, configuration file, parameters.  
 Subsequent options overwrite the previous ones.
 
 ```javascript
 // 'config.json'
+// 4 spaces indentation for CSS and HTML.
+// 2 spaces indentation for JavaScript.
 {
   "indent_size": 4,
+  "indent_char": ' ',
   // other options
   "js": {
     // other options
@@ -137,7 +141,7 @@ Subsequent options overwrite the previous ones.
   }
 }
 
-// Overwrite the indentention specified in 'config.json' with
+// Overwrite the indentation specified in 'config.json' with
 // one tab indentation for all CSS, HTML and JavaScript.
 // All other options in 'config.json' are maintained.
 gulp.task('prettify', function() {

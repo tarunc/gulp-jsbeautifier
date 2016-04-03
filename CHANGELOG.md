@@ -1,6 +1,6 @@
 # Changelog
 
-## Next
+## 2.0.3 - 2016-04-03
 - Improve documentation
 - Run lint before tests
 - Keep unnecessary files outside of the package

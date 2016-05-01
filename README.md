@@ -1,10 +1,10 @@
 # gulp-jsbeautifier
-[![Build Status](https://travis-ci.org/tarunc/gulp-jsbeautifier.png?branch=master)](https://travis-ci.org/tarunc/gulp-jsbeautifier)
-[![NPM version](https://badge.fury.io/js/gulp-jsbeautifier.png)](http://badge.fury.io/js/gulp-jsbeautifier)
-[![Coverage Status](https://coveralls.io/repos/tarunc/gulp-jsbeautifier/badge.png)](https://coveralls.io/r/tarunc/gulp-jsbeautifier)
-[![Code Climate](https://codeclimate.com/github/tarunc/gulp-jsbeautifier.png)](https://codeclimate.com/github/tarunc/gulp-jsbeautifier)
-[![Dependencies](https://david-dm.org/tarunc/gulp-jsbeautifier.png)](https://david-dm.org/tarunc/gulp-jsbeautifier)
-[![devDependency Status](https://david-dm.org/tarunc/gulp-jsbeautifier/dev-status.png)](https://david-dm.org/tarunc/gulp-jsbeautifier#info=devDependencies)
+[![Build Status](https://travis-ci.org/tarunc/gulp-jsbeautifier.svg?branch=master)](https://travis-ci.org/tarunc/gulp-jsbeautifier)
+[![npm version](https://badge.fury.io/js/gulp-jsbeautifier.svg)](https://badge.fury.io/js/gulp-jsbeautifier)
+[![Coverage Status](https://coveralls.io/repos/github/tarunc/gulp-jsbeautifier/badge.svg?branch=master)](https://coveralls.io/github/tarunc/gulp-jsbeautifier?branch=master)
+[![Code Climate](https://codeclimate.com/github/tarunc/gulp-jsbeautifier/badges/gpa.svg)](https://codeclimate.com/github/tarunc/gulp-jsbeautifier)
+[![Dependency Status](https://david-dm.org/tarunc/gulp-jsbeautifier.svg)](https://david-dm.org/tarunc/gulp-jsbeautifier)
+[![devDependency Status](https://david-dm.org/tarunc/gulp-jsbeautifier/dev-status.svg)](https://david-dm.org/tarunc/gulp-jsbeautifier#info=devDependencies)
 
 > Prettify JavaScript, JSON, HTML and CSS.  
 [jsbeautifier.org](http://jsbeautifier.org/) for gulp.

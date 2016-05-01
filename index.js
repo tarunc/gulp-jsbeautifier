@@ -12,6 +12,7 @@ var beautify = require('js-beautify');
 var fs = require('fs');
 var gutil = require('gulp-util');
 var path = require('path');
+var rc = require('rc');
 var through = require('through2');
 var log = gutil.log;
 var PluginError = gutil.PluginError;
@@ -55,7 +56,7 @@ function setup(options) {
     debug('Configuration file loaded: ' + JSON.stringify(cfg.params.config), cfg.params.debug);
   } else {
     // Search and load the '.jsbeautifyrc' file
-    require('rc')('jsbeautify', cfg.file);
+    rc('jsbeautify', cfg.file);
 
     if (cfg.file.configs) {
       debug('Configuration files loaded:\n' + JSON.stringify(cfg.file.configs, null, 2), cfg.params.debug);

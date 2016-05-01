@@ -44,8 +44,6 @@ function setup(options) {
     final: {}
   };
 
-  var property;
-
   // Load 'parameters options'
   _.assign(cfg.params, options);
 
@@ -82,17 +80,17 @@ function setup(options) {
 
   // Delete 'plugin options' from 'beautifier options'
   ['css', 'html', 'js'].forEach(function (type) {
-    for (property in cfg.defaults) {
+    _.keys(cfg.defaults).forEach(function (property) {
       delete cfg.final[type][property];
-    }
+    });
   });
 
   // Delete 'beautifier options' from 'plugin options'
-  for (property in cfg.final) {
+  _.keys(cfg.final).forEach(function (property) {
     if (!cfg.defaults.hasOwnProperty(property)) {
       delete cfg.final[property];
     }
-  }
+  });
 
   debug('Configuration used:\n' + JSON.stringify(cfg.final, null, 2), cfg.params.debug);
 

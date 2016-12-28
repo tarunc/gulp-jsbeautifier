@@ -99,6 +99,14 @@ function setup(options) {
 }
 
 function prettify(options) {
+   return helper(options, true);
+}
+
+function validate(options) {
+  return helper(options, false);
+}
+
+function helper(options, doBeautify) {
   var config = setup(options);
 
   return through.obj(function (file, encoding, callback) {
@@ -135,13 +143,18 @@ function prettify(options) {
     file.jsbeautify.beautified = false;
 
     if (type) {
-      oldContent = file.contents.toString('utf8');
-      newContent = beautify[type](oldContent, config[type]);
-
-      if (oldContent.toString() !== newContent.toString()) {
-        file.contents = new Buffer(newContent);
-        file.jsbeautify.beautified = true;
-      }
+	  oldContent = file.contents.toString('utf8');
+	  newContent = beautify[type](oldContent, config[type]);
+	
+	  if (oldContent.toString() !== newContent.toString() ) {
+		  if( doBeautify ) {
+			  file.contents = new Buffer(newContent);
+			  file.jsbeautify.beautified = true;
+		  } else {
+			  callback(new PluginError(PLUGIN_NAME, 'Please beautify.'));
+			  return;
+		  }
+	  }
     }
 
     callback(null, file);
@@ -168,4 +181,5 @@ function reporter() {
 
 // Exporting the plugin functions
 module.exports = prettify;
+module.exports.validate = validate;
 module.exports.reporter = reporter;

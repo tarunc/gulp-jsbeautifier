@@ -1,7 +1,7 @@
 {
   "name": "gulp-jsbeautifier",
   "description": "jsbeautifier.org for Gulp",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "homepage": "https://github.com/tarunc/gulp-jsbeautifier",
   "author": {
     "name": "Tarun Chaudhry",

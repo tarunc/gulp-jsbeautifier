@@ -7,6 +7,10 @@
     "name": "Tarun Chaudhry",
     "url": "https://github.com/tarunc"
   },
+  "contributors": [{
+    "name": "Simone Biassoni",
+    "url": "https://github.com/biasso"
+  }],
   "repository": {
     "type": "git",
     "url": "https://github.com/tarunc/gulp-jsbeautifier.git"

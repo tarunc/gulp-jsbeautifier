@@ -1,10 +1,3 @@
-/*
- * gulp-jsbeautifier
- * https://github.com/tarunc/gulp-jsbeautifier
- * Copyright (c) 2015-2016 Tarun Chaudhry
- * Licensed under the MIT license.
- */
-
 'use strict';
 
 var _ = require('lodash');

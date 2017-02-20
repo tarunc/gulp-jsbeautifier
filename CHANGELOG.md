@@ -1,5 +1,11 @@
 # Changelog
 
+## Next
+- Update copyright
+
+## 2.0.4 - 2016-12-30
+- Update dependencies
+
 ## 2.0.3 - 2016-04-03
 - Improve documentation
 - Run lint before tests

@@ -81,7 +81,7 @@ function setup(options) {
 
   // Delete 'beautifier options' from 'plugin options'
   _.keys(cfg.final).forEach(function (property) {
-    if (!cfg.defaults.hasOwnProperty.call(cfg.defaults, property)) {
+    if (!Object.prototype.hasOwnProperty.call(cfg.defaults, property)) {
       delete cfg.final[property];
     }
   });

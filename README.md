@@ -154,6 +154,7 @@ gulp.task('prettify', function() {
     .pipe(gulp.dest('./'));
 });
 ```
+
 ## Validation
 Checks if it is possible beautify some files.  
 You need to use the reporter to see the result.  
@@ -163,17 +164,21 @@ The validation function accepts the same options listed above.
 var gulp = require('gulp');
 var prettify = require('gulp-jsbeautifier');
 
-gulp.task('prettify', function() {
+gulp.task('validate', function(done) {
   gulp.src(['./*.css', './*.html', './*.js'])
     .pipe(prettify.validate())
     .pipe(prettify.reporter())
-    .pipe(gulp.dest('./'));
+    .on('error', function(error) {
+      done(error);
+    })
+
+  done();
 });
 ```
 
 ## Reporter
 Lists files that have been beautified, those already beautified and those that can not be beautified.  
-If you performed the validation, it shows the files that can be beautified and finally emits an error if present.
+If you performed the validation, it lists files that can be beautified and, if presents, emits an error.
 
 ```javascript
 var gulp = require('gulp');
@@ -184,12 +189,6 @@ gulp.task('prettify', function() {
     .pipe(prettify())
     .pipe(prettify.reporter())
     .pipe(gulp.dest('./'));
-});
-
-gulp.task('validate', function() {
-  gulp.src(['./*.css', './*.html', './*.js'])
-    .pipe(prettify.validate())
-    .pipe(prettify.reporter());
 });
 ```
 

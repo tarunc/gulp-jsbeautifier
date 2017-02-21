@@ -198,10 +198,8 @@ Type: `number`
 Default value: `prettify.report.BEAUTIFIED`  
 Other values: `prettify.report.ALL`
 
-With BEAUTIFIED value, the reporter lists only beautified files (or those that can be beautified in the case of validation).
-
-With ALL value, the reporter also lists the other files
-
+With BEAUTIFIED value, the reporter lists only beautified files (or those that can be beautified in the case of validation).  
+With ALL value, the reporter also lists the other files.
 
 ```javascript
 var gulp = require('gulp');
@@ -210,7 +208,9 @@ var prettify = require('gulp-jsbeautifier');
 gulp.task('prettify', function() {
   gulp.src(['./*.css', './*.html', './*.js'])
     .pipe(prettify())
-    .pipe(prettify.reporter())
+    .pipe(prettify.reporter({
+      verbosity: prettify.report.ALL
+    }))
     .pipe(gulp.dest('./'));
 });
 ```

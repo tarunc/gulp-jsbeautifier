@@ -1,6 +1,8 @@
 # Changelog
 
 ## Next
+- Add validation
+- Add `verbosity` option for reporter
 - Update copyright
 
 ## 2.0.4 - 2016-12-30

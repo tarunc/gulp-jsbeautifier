@@ -154,8 +154,26 @@ gulp.task('prettify', function() {
     .pipe(gulp.dest('./'));
 });
 ```
+## Validation
+Checks if it is possible beautify some files.  
+You need to use the reporter to see the result.  
+The validation function accepts the same options listed above.
+
+```javascript
+var gulp = require('gulp');
+var prettify = require('gulp-jsbeautifier');
+
+gulp.task('prettify', function() {
+  gulp.src(['./*.css', './*.html', './*.js'])
+    .pipe(prettify.validate())
+    .pipe(prettify.reporter())
+    .pipe(gulp.dest('./'));
+});
+```
+
 ## Reporter
-Lists files that have been beautified, those already beautified and those that cannot be beautified.
+Lists files that have been beautified, those already beautified and those that can not be beautified.  
+If you performed the validation, it shows the files that can be beautified and finally emits an error if present.
 
 ```javascript
 var gulp = require('gulp');
@@ -167,27 +185,34 @@ gulp.task('prettify', function() {
     .pipe(prettify.reporter())
     .pipe(gulp.dest('./'));
 });
+
+gulp.task('validate', function() {
+  gulp.src(['./*.css', './*.html', './*.js'])
+    .pipe(prettify.validate())
+    .pipe(prettify.reporter());
+});
 ```
 
-## Other
-Older options `mode` and `showDiff` are deprecated.  
-Their functions are made available by [gulp-diff](https://www.npmjs.com/package/gulp-diff).
+### Reporter options
+#### `verbosity`
+Type: `number`  
+Default value: `prettify.report.BEAUTIFIED`  
+Other values: `prettify.report.ALL`
+
+With BEAUTIFIED value, the reporter lists only beautified files (or those that can be beautified in the case of validation).
+
+With ALL value, the reporter also lists the other files
+
 
 ```javascript
 var gulp = require('gulp');
 var prettify = require('gulp-jsbeautifier');
-var diff = require('gulp-diff');
 
-// This is the equivalent of older "mode: 'VERIFY_ONLY'" with "showDiff: true".
-// The task will fail if at least one file can be beautified.
-gulp.task('git-pre-commit', function() {
-  gulp.src(['./dist/*.js'])
+gulp.task('prettify', function() {
+  gulp.src(['./*.css', './*.html', './*.js'])
     .pipe(prettify())
-    .pipe(diff())
-    .pipe(diff.reporter({
-      quiet: false,  // if 'true', is the equivalent of "showDiff: false"
-      fail: true
-    }));
+    .pipe(prettify.reporter())
+    .pipe(gulp.dest('./'));
 });
 ```
 

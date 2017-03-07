@@ -154,6 +154,30 @@ gulp.task('prettify', function() {
     .pipe(gulp.dest('./'));
 });
 ```
+## Validate
+Throws an error if any source files are not pretty. Validate accepts the same options as the beautify. Use validate to create a pretty dependency for tasks. The error message given by validate is "Please beautify."
+
+```javascript
+var gulp = require('gulp');
+var util = require('gulp-util')
+var prettify = require('gulp-jsbeautifier');
+
+gulp.task('isPretty', function() {
+  return gulp.src(['./*.css', './*.html', './*.js'])
+    .pipe(prettify.validate())
+    .on('error', function(error) {
+   		util.log(error.message);
+    	throw error;
+     })
+});
+
+//If the source is not pretty, then the files will not be copied.
+gulp.task('build', ['isPretty'], function(){
+	return gulp.src(['./*.css', './*.html', './*.js'])
+		.pipe(gulp.dest("buildFolder"));
+});
+```
+
 ## Reporter
 Lists files that have been beautified, those already beautified and those that cannot be beautified.
 

@@ -1,12 +1,16 @@
 {
   "name": "gulp-jsbeautifier",
   "description": "jsbeautifier.org for Gulp",
-  "version": "2.1.1",
+  "version": "2.0.4",
   "homepage": "https://github.com/tarunc/gulp-jsbeautifier",
   "author": {
     "name": "Tarun Chaudhry",
     "url": "https://github.com/tarunc"
   },
+  "contributors": [{
+    "name": "Simone Biassoni",
+    "url": "https://github.com/biasso"
+  }],
   "repository": {
     "type": "git",
     "url": "https://github.com/tarunc/gulp-jsbeautifier.git"
@@ -27,28 +31,27 @@
   },
   "scripts": {
     "lint": "eslint . --ignore-path .gitignore",
-    "pretest": "npm run lint",
     "test": "mocha",
     "cover": "istanbul cover _mocha",
     "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
   "dependencies": {
-    "gulp-util": "^3.0.7",
-    "js-beautify": "^1.6.2",
-    "lodash": "^4.11.1",
+    "gulp-util": "^3.0.8",
+    "js-beautify": "^1.6.7",
+    "lodash": "^4.17.3",
     "rc": "^1.1.6",
-    "through2": "^2.0.1"
+    "through2": "^2.0.3"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "coveralls": "^2.11.9",
-    "del": "^2.2.0",
-    "eslint": "^2.9.0",
-    "eslint-config-airbnb-base": "^2.0.0",
-    "eslint-plugin-import": "^1.6.1",
-    "istanbul": "^0.4.3",
-    "mocha": "^2.4.5",
-    "sinon": "^1.17.3"
+    "coveralls": "^2.11.15",
+    "del": "^2.2.2",
+    "eslint": "^3.12.2",
+    "eslint-config-airbnb-base": "^11.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "sinon": "^1.17.6"
   },
   "keywords": [
     "beautify",

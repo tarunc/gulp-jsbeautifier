@@ -1,10 +1,3 @@
-/*
- * gulp-jsbeautifier
- * https://github.com/tarunc/gulp-jsbeautifier
- * Copyright (c) 2015-2016 Tarun Chaudhry
- * Licensed under the MIT license.
- */
-
 'use strict';
 
 var _ = require('lodash');
@@ -88,7 +81,7 @@ function setup(options) {
 
   // Delete 'beautifier options' from 'plugin options'
   _.keys(cfg.final).forEach(function (property) {
-    if (!cfg.defaults.hasOwnProperty(property)) {
+    if (!Object.prototype.hasOwnProperty.call(cfg.defaults, property)) {
       delete cfg.final[property];
     }
   });
@@ -166,12 +159,10 @@ function reporter() {
     if (file.jsbeautify) {
       if (file.jsbeautify.type === null) {
         log('Cannot beautify ' + gutil.colors.cyan(file.relative));
+      } else if (file.jsbeautify.beautified) {
+        log('Beautified ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
       } else {
-        if (file.jsbeautify.beautified === true) {
-          log('Beautified ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
-        } else {
-          log('Already beautified ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
-        }
+        log('Already beautified ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
       }
     }
 

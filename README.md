@@ -155,7 +155,7 @@ gulp.task('prettify', function() {
 });
 ```
 
-## Validation
+## Validate
 Checks if it is possible to beautify some files.
 The reporter is responsible for displaying the validate results and will emit an error before
 the stream ends if a file could be beautified.
@@ -172,9 +172,8 @@ gulp.task('validate', function() {
 ```
 
 ## Reporter
-Lists files that have been beautified, those already beautified and those that can not be beautified.  
-If you performed the validation, it lists files that can be beautified and, if presents, emits an error
-before the stream ends.
+Lists files that have been beautified, those already beautified, and those that can not be beautified.  
+If the [validate](#validate) feature is used, the reporter lists files that can be beautified and emits an error before the stream ends if such a file was detected.
 
 ```javascript
 var gulp = require('gulp');
@@ -194,7 +193,7 @@ Type: `number`
 Default value: `prettify.report.BEAUTIFIED`  
 Other values: `prettify.report.ALL`
 
-With BEAUTIFIED value, the reporter lists only beautified files (or those that can be beautified in the case of validation).  
+With BEAUTIFIED value, the reporter lists only beautified files (or those that can be beautified in the case of validate).  
 With ALL value, the reporter also lists the other files.
 
 ```javascript

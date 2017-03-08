@@ -1,19 +1,22 @@
 {
   "name": "gulp-jsbeautifier",
   "description": "jsbeautifier.org for Gulp",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "homepage": "https://github.com/tarunc/gulp-jsbeautifier",
   "author": {
     "name": "Tarun Chaudhry",
     "url": "https://github.com/tarunc"
   },
-  "contributors": [{
-    "name": "Simone Biassoni",
-    "url": "https://github.com/biasso"
-  },{
-  	"name": "Denny Ayard",
-  	"url": "https://github.com/djayard"
-  }],
+  "contributors": [
+    {
+      "name": "Simone Biassoni",
+      "url": "https://github.com/biasso"
+    },
+    {
+      "name": "Denny Ayard",
+      "url": "https://github.com/djayard"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/tarunc/gulp-jsbeautifier.git"

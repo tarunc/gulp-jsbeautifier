@@ -1,7 +1,7 @@
 # Changelog
 
-## Next
-- Add validation
+## 2.1.0 - 2017-03-08
+- Add validate function
 - Add `verbosity` option for reporter
 - Update copyright
 

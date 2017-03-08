@@ -12,12 +12,23 @@ var PluginError = gutil.PluginError;
 
 var PLUGIN_NAME = 'gulp-jsbeautifier';
 
+/**
+ * Show debug messages
+ * @param  {string} string The message
+ * @param  {boolean} show  Specifies whether the message should be displayed or not
+ * @return {void}
+ */
 function debug(string, show) {
   if (show === true) {
     log(string);
   }
 }
 
+/**
+ * Reorganize the options to use them in js-beautify
+ * @param  {Object} options The options to reorganize
+ * @return {Object} The options reorganized
+ */
 function setup(options) {
   var cfg = {
     defaults: {
@@ -91,15 +102,13 @@ function setup(options) {
   return cfg.final;
 }
 
-function prettify(options) {
-   return helper(options, true);
-}
-
-function validate(options) {
-  return helper(options, false);
-}
-
-function helper(options, doBeautify) {
+/**
+ * Beautify files or perform validation
+ * @param  {Object} options The gulp-jsbeautifier options
+ * @param  {boolean} doValidation Specifies whether only perform validation
+ * @return {Object} The object stream
+ */
+function helper(options, doValidation) {
   var config = setup(options);
 
   return through.obj(function (file, encoding, callback) {
@@ -134,35 +143,19 @@ function helper(options, doBeautify) {
     file.jsbeautify = {};
     file.jsbeautify.type = type;
     file.jsbeautify.beautified = false;
+    file.jsbeautify.canBeautify = false;
 
     if (type) {
-	  oldContent = file.contents.toString('utf8');
-	  newContent = beautify[type](oldContent, config[type]);
-	
-	  if (oldContent.toString() !== newContent.toString() ) {
-		  if( doBeautify ) {
-			  file.contents = new Buffer(newContent);
-			  file.jsbeautify.beautified = true;
-		  } else {
-			  callback(new PluginError(PLUGIN_NAME, 'Please beautify.'));
-			  return;
-		  }
-	  }
-    }
+      oldContent = file.contents.toString('utf8');
+      newContent = beautify[type](oldContent, config[type]);
 
-    callback(null, file);
-  });
-}
-
-function reporter() {
-  return through.obj(function (file, encoding, callback) {
-    if (file.jsbeautify) {
-      if (file.jsbeautify.type === null) {
-        log('Cannot beautify ' + gutil.colors.cyan(file.relative));
-      } else if (file.jsbeautify.beautified) {
-        log('Beautified ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
-      } else {
-        log('Already beautified ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
+      if (oldContent.toString() !== newContent.toString()) {
+        if (doValidation) {
+          file.jsbeautify.canBeautify = true;
+        } else {
+          file.contents = new Buffer(newContent);
+          file.jsbeautify.beautified = true;
+        }
       }
     }
 
@@ -170,7 +163,65 @@ function reporter() {
   });
 }
 
+/**
+ * Perform the validation of files without changing their content
+ * @param  {Object} options The gulp-jsbeautifier options
+ * @return {Object} The object stream
+ */
+function validate(options) {
+  return helper(options, true);
+}
+
+/**
+ * Beautify files
+ * @param  {Object} options The gulp-jsbeautifier options
+ * @return {Object} The object stream with beautified files
+ */
+function prettify(options) {
+  return helper(options, false);
+}
+
+/**
+ * Show results of beautification or validation
+ * @param  {Object} options The gulp-jsbeautifier reporter options
+ * @return {Object} The object stream
+ */
+function reporter(options) {
+  var verbosity = 0;
+  var errorCount = 0;
+
+  if (typeof options === 'object' && Object.prototype.hasOwnProperty.call(options, 'verbosity')) {
+      verbosity = options.verbosity;
+  }
+
+  return through.obj(function (file, encoding, callback) {
+    if (file.jsbeautify) {
+      if (verbosity >= 1 && file.jsbeautify.type === null) {
+        log('Can not beautify ' + gutil.colors.cyan(file.relative));
+      } else if (verbosity >= 0 && file.jsbeautify.beautified) {
+        log('Beautified ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
+      } else if (verbosity >= 0 && file.jsbeautify.canBeautify) {
+        errorCount += 1;
+        log('Can beautify ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
+      } else if (verbosity >= 1) {
+        log('Already beautified ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
+      }
+    }
+
+    callback(null, file);
+  }, function flush(callback) {
+    if (errorCount > 0) {
+      this.emit('error', new PluginError(PLUGIN_NAME, 'Validation not passed'));
+    }
+    callback();
+  });
+}
+
 // Exporting the plugin functions
 module.exports = prettify;
 module.exports.validate = validate;
 module.exports.reporter = reporter;
+module.exports.report = {
+  BEAUTIFIED: 0,
+  ALL: 1
+};

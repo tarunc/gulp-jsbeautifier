@@ -87,6 +87,8 @@ describe('prettify()', function () {
       expect(newFile.jsbeautify.type).to.equal('js');
       expect(newFile.jsbeautify.beautified).to.exist;
       expect(newFile.jsbeautify.beautified).to.be.false;
+      expect(newFile.jsbeautify.canBeautify).to.exist;
+      expect(newFile.jsbeautify.canBeautify).to.be.false;
       expect(console.log.called).to.be.true;
       done();
     });
@@ -154,6 +156,8 @@ describe('prettify()', function () {
           expect(newFile.jsbeautify).to.exist;
           expect(newFile.jsbeautify.beautified).to.exist;
           expect(newFile.jsbeautify.beautified).to.be.true;
+          expect(newFile.jsbeautify.canBeautify).to.exist;
+          expect(newFile.jsbeautify.canBeautify).to.be.false;
           expect(newFile.jsbeautify.type).to.exist;
           expect(newFile.jsbeautify.type).to.equal(file.type);
           expect(console.log.called).to.be.false;
@@ -179,6 +183,8 @@ describe('prettify()', function () {
           expect(newFile.contents.toString()).to.equal(file.contents.fixture);
           expect(newFile.jsbeautify.beautified).to.exist;
           expect(newFile.jsbeautify.beautified).to.be.false;
+          expect(newFile.jsbeautify.canBeautify).to.exist;
+          expect(newFile.jsbeautify.canBeautify).to.be.false;
           expect(newFile.jsbeautify.type).to.be.null;
           expect(console.log.called).to.be.false;
           done();
@@ -332,6 +338,8 @@ describe('prettify()', function () {
           expect(newFile.jsbeautify).to.exist;
           expect(newFile.jsbeautify.beautified).to.exist;
           expect(newFile.jsbeautify.beautified).to.be.true;
+          expect(newFile.jsbeautify.canBeautify).to.exist;
+          expect(newFile.jsbeautify.canBeautify).to.be.false;
           expect(newFile.jsbeautify.type).to.exist;
           expect(newFile.jsbeautify.type).to.equal(file.type);
           expect(console.log.called).to.be.false;
@@ -415,6 +423,8 @@ describe('prettify()', function () {
           expect(newFile.jsbeautify).to.exist;
           expect(newFile.jsbeautify.beautified).to.exist;
           expect(newFile.jsbeautify.beautified).to.be.false;
+          expect(newFile.jsbeautify.canBeautify).to.exist;
+          expect(newFile.jsbeautify.canBeautify).to.be.false;
           expect(newFile.jsbeautify.type).to.be.null;
           expect(console.log.called).to.be.false;
           done();
@@ -440,6 +450,8 @@ describe('prettify()', function () {
           expect(newFile.jsbeautify).to.exist;
           expect(newFile.jsbeautify.beautified).to.exist;
           expect(newFile.jsbeautify.beautified).to.be.true;
+          expect(newFile.jsbeautify.canBeautify).to.exist;
+          expect(newFile.jsbeautify.canBeautify).to.be.false;
           expect(newFile.jsbeautify.type).to.exist;
           expect(newFile.jsbeautify.type).to.equal(file.type);
           expect(console.log.called).to.be.false;
@@ -522,6 +534,8 @@ describe('prettify()', function () {
           expect(newFile.jsbeautify).to.exist;
           expect(newFile.jsbeautify.beautified).to.exist;
           expect(newFile.jsbeautify.beautified).to.be.true;
+          expect(newFile.jsbeautify.canBeautify).to.exist;
+          expect(newFile.jsbeautify.canBeautify).to.be.false;
           expect(newFile.jsbeautify.type).to.exist;
           expect(newFile.jsbeautify.type).to.equal(file.type);
           expect(console.log.called).to.be.false;

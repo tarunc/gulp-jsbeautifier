@@ -154,32 +154,31 @@ gulp.task('prettify', function() {
     .pipe(gulp.dest('./'));
 });
 ```
-## Validate
-Throws an error if any source files are not pretty. Validate accepts the same options as the beautify. Use validate to create a pretty dependency for tasks. The error message given by validate is "Please beautify."
+
+## Validation
+Checks if it is possible beautify some files.  
+You need to use the reporter to see the result.  
+The validation function accepts the same options listed above.
 
 ```javascript
 var gulp = require('gulp');
-var util = require('gulp-util')
 var prettify = require('gulp-jsbeautifier');
 
-gulp.task('isPretty', function() {
-  return gulp.src(['./*.css', './*.html', './*.js'])
+gulp.task('validate', function(done) {
+  gulp.src(['./*.css', './*.html', './*.js'])
     .pipe(prettify.validate())
+    .pipe(prettify.reporter())
     .on('error', function(error) {
-   		util.log(error.message);
-    	throw error;
-     })
-});
+      done(error);
+    })
 
-//If the source is not pretty, then the files will not be copied.
-gulp.task('build', ['isPretty'], function(){
-	return gulp.src(['./*.css', './*.html', './*.js'])
-		.pipe(gulp.dest("buildFolder"));
+  done();
 });
 ```
 
 ## Reporter
-Lists files that have been beautified, those already beautified and those that cannot be beautified.
+Lists files that have been beautified, those already beautified and those that can not be beautified.  
+If you performed the validation, it lists files that can be beautified and, if presents, emits an error.
 
 ```javascript
 var gulp = require('gulp');
@@ -193,25 +192,26 @@ gulp.task('prettify', function() {
 });
 ```
 
-## Other
-Older options `mode` and `showDiff` are deprecated.  
-Their functions are made available by [gulp-diff](https://www.npmjs.com/package/gulp-diff).
+### Reporter options
+#### `verbosity`
+Type: `number`  
+Default value: `prettify.report.BEAUTIFIED`  
+Other values: `prettify.report.ALL`
+
+With BEAUTIFIED value, the reporter lists only beautified files (or those that can be beautified in the case of validation).  
+With ALL value, the reporter also lists the other files.
 
 ```javascript
 var gulp = require('gulp');
 var prettify = require('gulp-jsbeautifier');
-var diff = require('gulp-diff');
 
-// This is the equivalent of older "mode: 'VERIFY_ONLY'" with "showDiff: true".
-// The task will fail if at least one file can be beautified.
-gulp.task('git-pre-commit', function() {
-  gulp.src(['./dist/*.js'])
+gulp.task('prettify', function() {
+  gulp.src(['./*.css', './*.html', './*.js'])
     .pipe(prettify())
-    .pipe(diff())
-    .pipe(diff.reporter({
-      quiet: false,  // if 'true', is the equivalent of "showDiff: false"
-      fail: true
-    }));
+    .pipe(prettify.reporter({
+      verbosity: prettify.report.ALL
+    }))
+    .pipe(gulp.dest('./'));
 });
 ```
 

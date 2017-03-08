@@ -1,9 +1,8 @@
 # Changelog
 
-## 2.0.5 - 2017-03-07
-- Added validate function that may be used to assert pretty.
-
 ## Next
+- Add validation
+- Add `verbosity` option for reporter
 - Update copyright
 
 ## 2.0.4 - 2016-12-30

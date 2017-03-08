@@ -211,7 +211,7 @@ function reporter(options) {
     callback(null, file);
   }, function flush(callback) {
     if (errorCount > 0) {
-      this.emit('error', new PluginError(PLUGIN_NAME, 'Validation not passed'));
+      this.emit('error', new PluginError(PLUGIN_NAME, 'Validation not passed. Please beautify.'));
     }
     callback();
   });

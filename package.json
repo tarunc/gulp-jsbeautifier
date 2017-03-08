@@ -10,6 +10,9 @@
   "contributors": [{
     "name": "Simone Biassoni",
     "url": "https://github.com/biasso"
+  },{
+  	"name": "Denny Ayard",
+  	"url": "https://github.com/djayard"
   }],
   "repository": {
     "type": "git",

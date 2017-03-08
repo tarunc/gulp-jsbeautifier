@@ -190,10 +190,8 @@ function reporter(options) {
   var verbosity = 0;
   var errorCount = 0;
 
-  if (typeof options === 'object') {
-    if (Object.prototype.hasOwnProperty.call(options, 'verbosity')) {
+  if (typeof options === 'object' && Object.prototype.hasOwnProperty.call(options, 'verbosity')) {
       verbosity = options.verbosity;
-    }
   }
 
   return through.obj(function (file, encoding, callback) {
@@ -213,7 +211,7 @@ function reporter(options) {
     callback(null, file);
   }, function flush(callback) {
     if (errorCount > 0) {
-      this.emit('error', new PluginError(PLUGIN_NAME, 'Validation not passed'));
+      this.emit('error', new PluginError(PLUGIN_NAME, 'Validation not passed. Please beautify.'));
     }
     callback();
   });

@@ -191,7 +191,7 @@ function reporter(options) {
   var errorCount = 0;
 
   if (typeof options === 'object' && Object.prototype.hasOwnProperty.call(options, 'verbosity')) {
-      verbosity = options.verbosity;
+    verbosity = options.verbosity;
   }
 
   return through.obj(function (file, encoding, callback) {

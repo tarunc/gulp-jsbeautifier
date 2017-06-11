@@ -114,9 +114,9 @@ All "beautifier options" placed in the root, are applied to CSS, HTML and JavaSc
 gulp.task('prettify', function() {
   gulp.src(['./*.css', './*.html', './*.js'])
     .pipe(prettify({
-      indent_level: 4,
+      indent_size: 4,
       js: {
-        indent_level: 2
+        indent_size: 2
       }
     }))
     .pipe(gulp.dest('./dist'));

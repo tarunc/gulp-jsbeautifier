@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1 - 2017-06-11
+- Update dependencies
+- Correct documentation ([#29](https://github.com/tarunc/gulp-jsbeautifier/issues/29))
+
 ## 2.1.0 - 2017-03-08
 - Add validate function
 - Add `verbosity` option for reporter

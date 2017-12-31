@@ -3,12 +3,12 @@
 var _ = require('lodash');
 var beautify = require('js-beautify');
 var fs = require('fs');
-var gutil = require('gulp-util');
+var chalk = require('chalk');
+var fancyLog = require('fancy-log');
+var PluginError = require('plugin-error');
 var path = require('path');
 var rc = require('rc');
 var through = require('through2');
-var log = gutil.log;
-var PluginError = gutil.PluginError;
 
 var PLUGIN_NAME = 'gulp-jsbeautifier';
 
@@ -20,7 +20,7 @@ var PLUGIN_NAME = 'gulp-jsbeautifier';
  */
 function debug(string, show) {
   if (show === true) {
-    log(string);
+    fancyLog(string);
   }
 }
 
@@ -197,14 +197,14 @@ function reporter(options) {
   return through.obj(function (file, encoding, callback) {
     if (file.jsbeautify) {
       if (verbosity >= 1 && file.jsbeautify.type === null) {
-        log('Can not beautify ' + gutil.colors.cyan(file.relative));
+        fancyLog('Can not beautify ' + chalk.cyan(file.relative));
       } else if (verbosity >= 0 && file.jsbeautify.beautified) {
-        log('Beautified ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
+        fancyLog('Beautified ' + chalk.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
       } else if (verbosity >= 0 && file.jsbeautify.canBeautify) {
         errorCount += 1;
-        log('Can beautify ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
+        fancyLog('Can beautify ' + chalk.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
       } else if (verbosity >= 1) {
-        log('Already beautified ' + gutil.colors.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
+        fancyLog('Already beautified ' + chalk.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
       }
     }
 

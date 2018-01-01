@@ -9,6 +9,8 @@
 > Prettify JavaScript, JSON, HTML and CSS.  
 [jsbeautifier.org](http://jsbeautifier.org/) for gulp.
 
+> Starting from next release, support for node <4 will be dropped.
+
 ## Install
 ```sh
 npm install --save-dev gulp-jsbeautifier

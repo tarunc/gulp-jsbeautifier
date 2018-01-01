@@ -44,10 +44,10 @@
   "dependencies": {
     "chalk": "^1.1.3",
     "fancy-log": "^1.3.2",
-    "js-beautify": "^1.6.14",
+    "js-beautify": "^1.7.5",
     "lodash": "^4.17.4",
     "plugin-error": "^0.1.2",
-    "rc": "^1.2.1",
+    "rc": "^1.2.2",
     "through2": "^2.0.3"
   },
   "devDependencies": {

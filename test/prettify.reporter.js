@@ -1,6 +1,7 @@
 var beautify = require('../');
 var expect = require('chai').expect;
-var gutil = require('gulp-util');
+var chalk = require('chalk');
+var Vinyl = require('vinyl');
 var path = require('path');
 var sinon = require('sinon');
 
@@ -8,7 +9,7 @@ function newVinyl(filename, contents) {
   var base = path.join(__dirname, 'fixtures');
   var filePath = path.join(base, filename);
 
-  return new gutil.File({
+  return new Vinyl({
     cwd: __dirname,
     base: base,
     path: filePath,
@@ -72,7 +73,7 @@ describe('prettify.reporter()', function () {
       expect(newFile.jsbeautify.canBeautify).to.exist;
       expect(newFile.jsbeautify.canBeautify).to.be.false;
       expect(console.log.calledOnce).to.be.true;
-      expect(console.log.calledWithExactly('Beautified ' + gutil.colors.cyan('file.js') + ' [js]')).to.be.true;
+      expect(console.log.calledWithExactly('Beautified ' + chalk.cyan('file.js') + ' [js]')).to.be.true;
       done();
     });
     stream.write(vinylFile);
@@ -103,7 +104,7 @@ describe('prettify.reporter()', function () {
       expect(newFile.jsbeautify.canBeautify).to.exist;
       expect(newFile.jsbeautify.canBeautify).to.be.false;
       expect(console.log.calledOnce).to.be.true;
-      expect(console.log.calledWithExactly('Beautified ' + gutil.colors.cyan('file.js') + ' [js]')).to.be.true;
+      expect(console.log.calledWithExactly('Beautified ' + chalk.cyan('file.js') + ' [js]')).to.be.true;
       done();
     });
     stream.write(vinylFile);
@@ -136,7 +137,7 @@ describe('prettify.reporter()', function () {
       expect(newFile.jsbeautify.canBeautify).to.exist;
       expect(newFile.jsbeautify.canBeautify).to.be.false;
       expect(console.log.calledOnce).to.be.true;
-      expect(console.log.calledWithExactly('Already beautified ' + gutil.colors.cyan('file.js') + ' [js]')).to.be.true;
+      expect(console.log.calledWithExactly('Already beautified ' + chalk.cyan('file.js') + ' [js]')).to.be.true;
       done();
     });
     stream.write(vinylFile);
@@ -199,7 +200,7 @@ describe('prettify.reporter()', function () {
       expect(newFile.jsbeautify.canBeautify).to.exist;
       expect(newFile.jsbeautify.canBeautify).to.be.true;
       expect(console.log.calledOnce).to.be.true;
-      expect(console.log.calledWithExactly('Can beautify ' + gutil.colors.cyan('file.js') + ' [js]')).to.be.true;
+      expect(console.log.calledWithExactly('Can beautify ' + chalk.cyan('file.js') + ' [js]')).to.be.true;
       done();
     });
     stream.write(vinylFile);
@@ -230,7 +231,7 @@ describe('prettify.reporter()', function () {
       expect(newFile.jsbeautify.canBeautify).to.exist;
       expect(newFile.jsbeautify.canBeautify).to.be.true;
       expect(console.log.calledOnce).to.be.true;
-      expect(console.log.calledWithExactly('Can beautify ' + gutil.colors.cyan('file.js') + ' [js]')).to.be.true;
+      expect(console.log.calledWithExactly('Can beautify ' + chalk.cyan('file.js') + ' [js]')).to.be.true;
       done();
     });
     stream.write(vinylFile);
@@ -292,7 +293,7 @@ describe('prettify.reporter()', function () {
       expect(newFile.jsbeautify.canBeautify).to.exist;
       expect(newFile.jsbeautify.canBeautify).to.be.false;
       expect(console.log.calledOnce).to.be.true;
-      expect(console.log.calledWithExactly('Can not beautify ' + gutil.colors.cyan('file.js'))).to.be.true;
+      expect(console.log.calledWithExactly('Can not beautify ' + chalk.cyan('file.js'))).to.be.true;
       done();
     });
     stream.write(vinylFile);

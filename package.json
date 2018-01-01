@@ -42,9 +42,11 @@
     "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
   "dependencies": {
-    "gulp-util": "^3.0.8",
+    "chalk": "^1.1.3",
+    "fancy-log": "^1.3.2",
     "js-beautify": "^1.6.14",
     "lodash": "^4.17.4",
+    "plugin-error": "^0.1.2",
     "rc": "^1.2.1",
     "through2": "^2.0.3"
   },
@@ -57,7 +59,8 @@
     "eslint-plugin-import": "^2.2.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
-    "sinon": "^2.3.4"
+    "sinon": "^2.3.4",
+    "vinyl": "^2.1.0"
   },
   "keywords": [
     "beautify",

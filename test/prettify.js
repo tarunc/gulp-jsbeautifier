@@ -2,7 +2,7 @@ var beautify = require('../');
 var del = require('del');
 var expect = require('chai').expect;
 var fs = require('fs');
-var gutil = require('gulp-util');
+var Vinyl = require('vinyl');
 var path = require('path');
 var sinon = require('sinon');
 
@@ -10,7 +10,7 @@ function newVinyl(filename, contents) {
   var base = path.join(__dirname, 'fixtures');
   var filePath = path.join(base, filename);
 
-  return new gutil.File({
+  return new Vinyl({
     cwd: __dirname,
     base: base,
     path: filePath,

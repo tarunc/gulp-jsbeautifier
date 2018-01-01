@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.1.2 - 2018-01-01
+- Update dependencies
+
 ## 2.1.1 - 2017-06-11
 - Update dependencies
 - Correct documentation ([#29](https://github.com/tarunc/gulp-jsbeautifier/issues/29))

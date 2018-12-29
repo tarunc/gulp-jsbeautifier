@@ -51,12 +51,12 @@ Contains specific _[beautifier options](#beautifier-options)_ for CSS, HTML and 
   Specifies which files should be treated as CSS, HTML or JavaScript.
 
 ```javascript
-// Specifies that ONLY '*.js' and '.eslintrc' files should be treated as JavaScript.
+// In addition to the default file_types, the '.eslintrc' file is also considered as JavaScript.
 gulp.task('beautify', () =>
   gulp.src(['./*.js', './*.json', './.eslintrc'])
     .pipe(beautify({
       js: {
-        file_types: ['.js', '.eslintrc']
+        file_types: ['.eslintrc']
       }
     }))
     .pipe(gulp.dest('./dist'))

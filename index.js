@@ -1,120 +1,87 @@
-'use strict';
+const beautify = require('js-beautify');
+const colors = require('ansi-colors');
+const cosmiconfig = require('cosmiconfig');
+const log = require('fancy-log');
+const mergeWith = require('lodash.mergewith');
+const path = require('path');
+const PluginError = require('plugin-error');
+const through = require('through2');
 
-var _ = require('lodash');
-var beautify = require('js-beautify');
-var fs = require('fs');
-var chalk = require('chalk');
-var fancyLog = require('fancy-log');
-var PluginError = require('plugin-error');
-var path = require('path');
-var rc = require('rc');
-var through = require('through2');
-
-var PLUGIN_NAME = 'gulp-jsbeautifier';
+const PLUGIN_NAME = 'gulp-jsbeautifier';
 
 /**
- * Show debug messages
- * @param  {string} string The message
- * @param  {boolean} show  Specifies whether the message should be displayed or not
- * @return {void}
+ * Merge options from different sources
+ * @param  {Object} pluginOptions The gulp-jsbeautifier options
+ * @return {Object} The options
  */
-function debug(string, show) {
-  if (show === true) {
-    fancyLog(string);
-  }
-}
-
-/**
- * Reorganize the options to use them in js-beautify
- * @param  {Object} options The options to reorganize
- * @return {Object} The options reorganized
- */
-function setup(options) {
-  var cfg = {
-    defaults: {
-      config: null,
-      debug: false,
-      css: {
-        file_types: ['.css', '.less', '.sass', '.scss']
-      },
-      html: {
-        file_types: ['.html']
-      },
-      js: {
-        file_types: ['.js', '.json']
-      }
+function mergeOptions(pluginOptions) {
+  const defaultOptions = {
+    config: null,
+    debug: false,
+    css: {
+      file_types: ['.css', '.less', '.sass', '.scss'],
     },
-    file: {},
-    params: {},
-    final: {}
+    html: {
+      file_types: ['.html'],
+    },
+    js: {
+      file_types: ['.js', '.json'],
+    },
   };
 
-  // Load 'parameters options'
-  _.assign(cfg.params, options);
-
   // Load 'file options'
-  if (cfg.params.config) {
-    // Load the configuration file.
-    _.assign(cfg.file, JSON.parse(fs.readFileSync(path.resolve(cfg.params.config))));
+  const explorer = cosmiconfig('jsbeautify');
+  let explorerResult;
 
-    debug('Configuration file loaded: ' + JSON.stringify(cfg.params.config), cfg.params.debug);
+  if (pluginOptions && pluginOptions.config) {
+    explorerResult = explorer.loadSync(path.resolve(pluginOptions.config));
   } else {
-    // Search and load the '.jsbeautifyrc' file
-    rc('jsbeautify', cfg.file);
+    explorerResult = explorer.searchSync();
+  }
 
-    if (cfg.file.configs) {
-      debug('Configuration files loaded:\n' + JSON.stringify(cfg.file.configs, null, 2), cfg.params.debug);
+  let fileOptions;
+  if (explorerResult) {
+    fileOptions = explorerResult.config;
+  }
+
+  // Merge options
+  const finalOptions = mergeWith({}, defaultOptions, fileOptions, pluginOptions, (objValue, srcValue) => {
+    if (Array.isArray(objValue)) {
+      return objValue.concat(srcValue);
     }
 
-    // Delete properties added by 'rc'
-    delete cfg.file._;
-    delete cfg.file.configs;
+    return undefined;
+  });
+
+  // Show debug messages
+  if (finalOptions.debug) {
+    if (fileOptions) {
+      log(`File options:\n${JSON.stringify(fileOptions, null, 2)}`);
+    }
+
+    log(`Final options:\n${JSON.stringify(finalOptions, null, 2)}`);
   }
 
   // Delete properties not used
-  delete cfg.file.debug;
-  delete cfg.file.config;
+  delete finalOptions.config;
+  delete finalOptions.debug;
 
-  // Merge 'plugin options'
-  _.assign(cfg.final, cfg.defaults, cfg.file, cfg.params);
-
-  // Merge 'beautifier options'
-  ['css', 'html', 'js'].forEach(function (type) {
-    cfg.final[type] = _.assign({}, cfg.defaults[type], cfg.file, cfg.file[type], cfg.params, cfg.params[type]);
-  });
-
-  // Delete 'plugin options' from 'beautifier options'
-  ['css', 'html', 'js'].forEach(function (type) {
-    _.keys(cfg.defaults).forEach(function (property) {
-      delete cfg.final[type][property];
-    });
-  });
-
-  // Delete 'beautifier options' from 'plugin options'
-  _.keys(cfg.final).forEach(function (property) {
-    if (!Object.prototype.hasOwnProperty.call(cfg.defaults, property)) {
-      delete cfg.final[property];
-    }
-  });
-
-  debug('Configuration used:\n' + JSON.stringify(cfg.final, null, 2), cfg.params.debug);
-
-  return cfg.final;
+  return finalOptions;
 }
 
 /**
  * Beautify files or perform validation
- * @param  {Object} options The gulp-jsbeautifier options
- * @param  {boolean} doValidation Specifies whether only perform validation
+ * @param  {Object} pluginOptions The gulp-jsbeautifier parameter options
+ * @param  {boolean} doValidation Specifies whether perform validation only
  * @return {Object} The object stream
  */
-function helper(options, doValidation) {
-  var config = setup(options);
+function helper(pluginOptions, doValidation) {
+  const options = mergeOptions(pluginOptions);
 
-  return through.obj(function (file, encoding, callback) {
-    var oldContent;
-    var newContent;
-    var type = null;
+  return through.obj((file, encoding, callback) => {
+    let oldContent;
+    let newContent;
+    let type = null;
 
     if (file.isNull()) {
       callback(null, file);
@@ -127,11 +94,9 @@ function helper(options, doValidation) {
     }
 
     // Check if current file should be treated as JavaScript, HTML, CSS or if it should be ignored
-    ['js', 'css', 'html'].some(function (value) {
+    ['js', 'css', 'html'].some((value) => {
       // Check if at least one element in 'file_types' is suffix of file basename
-      if (config[value].file_types.some(function (suffix) {
-        return _.endsWith(path.basename(file.path), suffix);
-      })) {
+      if (options[value].file_types.some(suffix => path.basename(file.path).endsWith(suffix))) {
         type = value;
         return true;
       }
@@ -147,13 +112,13 @@ function helper(options, doValidation) {
 
     if (type) {
       oldContent = file.contents.toString('utf8');
-      newContent = beautify[type](oldContent, config[type]);
+      newContent = beautify[type](oldContent, options);
 
       if (oldContent.toString() !== newContent.toString()) {
         if (doValidation) {
           file.jsbeautify.canBeautify = true;
         } else {
-          file.contents = new Buffer(newContent);
+          file.contents = Buffer.from(newContent);
           file.jsbeautify.beautified = true;
         }
       }
@@ -164,47 +129,43 @@ function helper(options, doValidation) {
 }
 
 /**
- * Perform the validation of files without changing their content
- * @param  {Object} options The gulp-jsbeautifier options
- * @return {Object} The object stream
- */
-function validate(options) {
-  return helper(options, true);
-}
-
-/**
  * Beautify files
- * @param  {Object} options The gulp-jsbeautifier options
+ * @param  {Object} options The gulp-jsbeautifier parameter options
  * @return {Object} The object stream with beautified files
  */
-function prettify(options) {
-  return helper(options, false);
-}
+const plugin = options => helper(options, false);
+
+/**
+ * Perform the validation of files without changing their content
+ * @param  {Object} options The gulp-jsbeautifier parameter options
+ * @return {Object} The object stream
+ */
+plugin.validate = options => helper(options, true);
 
 /**
  * Show results of beautification or validation
  * @param  {Object} options The gulp-jsbeautifier reporter options
  * @return {Object} The object stream
  */
-function reporter(options) {
-  var verbosity = 0;
-  var errorCount = 0;
+plugin.reporter = (options) => {
+  let verbosity = 0;
+  let errorCount = 0;
 
   if (typeof options === 'object' && Object.prototype.hasOwnProperty.call(options, 'verbosity')) {
-    verbosity = options.verbosity;
+    ({ verbosity } = options);
   }
 
-  return through.obj(function (file, encoding, callback) {
+  return through.obj((file, encoding, callback) => {
     if (file.jsbeautify) {
       if (verbosity >= 1 && file.jsbeautify.type === null) {
-        fancyLog('Can not beautify ' + chalk.cyan(file.relative));
+        log(`Can not beautify ${colors.cyan(file.relative)}`);
       } else if (verbosity >= 0 && file.jsbeautify.beautified) {
-        fancyLog('Beautified ' + chalk.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
+        log(`Beautified ${colors.cyan(file.relative)} [${file.jsbeautify.type}]`);
       } else if (verbosity >= 0 && file.jsbeautify.canBeautify) {
         errorCount += 1;
-        fancyLog('Can beautify ' + chalk.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
+        log(`Can beautify ${colors.cyan(file.relative)} [${file.jsbeautify.type}]`);
       } else if (verbosity >= 1) {
-        fancyLog('Already beautified ' + chalk.cyan(file.relative) + ' [' + file.jsbeautify.type + ']');
+        log(`Already beautified ${colors.cyan(file.relative)} [${file.jsbeautify.type}]`);
       }
     }
 
@@ -215,13 +176,11 @@ function reporter(options) {
     }
     callback();
   });
-}
-
-// Exporting the plugin functions
-module.exports = prettify;
-module.exports.validate = validate;
-module.exports.reporter = reporter;
-module.exports.report = {
-  BEAUTIFIED: 0,
-  ALL: 1
 };
+
+plugin.report = {
+  BEAUTIFIED: 0,
+  ALL: 1,
+};
+
+module.exports = plugin;

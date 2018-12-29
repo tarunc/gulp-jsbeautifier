@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0 - 2018-12-29
+- Drop support for node <6
+- Add support to YAML configuration file
+- Change the logic to merge options
+- Update dependencies
+
 ## 2.1.2 - 2018-01-01
 - Update dependencies
 

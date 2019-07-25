@@ -194,7 +194,7 @@ describe('beautify()', () => {
     const filePath = path.join(__dirname, 'fileOptions.yml');
 
     before(() => {
-      fs.writeFileSync(filePath, 'indent_char: "\t"\nindent_size: 2\ncss:\n  indent_size: 1');
+      fs.writeFileSync(filePath, 'indent_char: " "\nindent_size: 2\ncss:\n  indent_size: 1\nhtml:\n  indent_char: "\t"\n  indent_size: 1');
     });
 
     after(() => {

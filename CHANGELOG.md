@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.1 - 2019-07-25
+- Update dependencies
+
 ## 3.0.0 - 2018-12-29
 - Drop support for node <6
 - Add support to YAML configuration file
